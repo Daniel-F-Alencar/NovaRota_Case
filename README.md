@@ -8,6 +8,9 @@ Case de Engenharia de Dados Sênior em Databricks Free Edition, com dados inteir
 - [Notebook para verificar o workspace](notebooks/00_workspace_smoke.ipynb)
 - [Executar a Bronze das seis fontes](docs/bronze-runbook.md)
 - [Contratos e cenários sintéticos](docs/data_contracts.md)
+- [Arquitetura](docs/architecture.md)
+- [Decisões e trade-offs (ADRs)](docs/decisions.md)
+- [Branches e fluxo de commits](docs/git-workflow.md)
 
 - [Exploração e proposta de solução](docs/solution-exploration.md)
 
@@ -41,11 +44,16 @@ novarota-lakehouse-case/
 ├── notebooks/
 ├── scripts/             # empacotamento para Databricks
 └── docs/
+    ├── architecture.md
+    ├── decisions.md
     ├── data_contracts.md
+    ├── git-workflow.md
     └── evidence/
 ```
 
 Os diretórios reservados contêm README explicando seu escopo. Configuração de código fica em `src/novarota/config/`; arquivos JSON de ambiente ficam em `config/`. Os imports públicos existentes, como `from novarota.config import PipelineConfig`, permanecem iguais.
+
+A reorganização está integrada em `develop`; `main` mantém a base Bronze demonstrada. Ver [fluxo Git](docs/git-workflow.md). Os 34 testes aprovados são anteriores à reorganização; a suíte não foi reexecutada nesta etapa.
 
 ## Executar
 
