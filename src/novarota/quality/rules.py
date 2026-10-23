@@ -78,11 +78,16 @@ def prepare(raw, source: str):
     result = grouped.select(*columns, "arquivo_origem", "hash_linha", "batch_id", "schema_version", "run_id_bronze",
                             "_first_seen", "multiplicidade", "_raw_payload", reasons(*checks).alias("_errors"),
                             F.to_json(F.array_sort(F.map_entries(extras)), options={"ignoreNullFields": "false"}).alias("extras_json"),
-                            F.element_at(extras, F.lit("dispositivo")).alias("dispositivo"))
+                            F.element_at(extras, F.lit("dispositivo")).alias("dispositivo"),
+                            F.to_json(F.struct(*[F.col(name) for name in contract.fields], F.col("_corrupt_record"),
+                                F.array_sort(F.map_entries(extras)).alias("extras")),
+                                options={"ignoreNullFields": "false"}).alias("_lexical_payload"))
     occurrence = F.to_json(F.struct(F.lit(source).alias("source"), F.col("arquivo_origem"), F.col("hash_linha"),
                                    F.col("batch_id"), F.col("schema_version"), F.col("_raw_payload")),
                            options={"ignoreNullFields": "false"})
     normalized = F.to_json(F.struct(*[F.col(name) for name in contract.fields], F.col("extras_json")),
                            options={"ignoreNullFields": "false", "timeZone": "UTC"})
+    hash_input = F.when(F.size("_errors") > 0, F.concat(F.lit("invalid_v1:"), F.col("_lexical_payload"))).otherwise(
+        F.concat(F.lit("normalized_v1:"), normalized))
     return (result.withColumn("_occurrence_id", F.sha2(occurrence, 256))
-            .withColumn("hash_conteudo", F.sha2(F.concat(F.lit("normalized_v1:"), normalized), 256)))
+            .withColumn("hash_conteudo", F.sha2(hash_input, 256)).drop("_lexical_payload"))

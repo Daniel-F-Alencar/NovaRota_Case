@@ -29,6 +29,7 @@ Todos os campos mínimos são obrigatórios, inclusive no payload CDC de deleç�
 - Risco/estorno: id_evento e id_estorno por fonte.
 - hash_linha: hash lexical da Bronze.
 - hash_conteudo: SHA-256 de `normalized_v1:` mais JSON dos campos do contrato tipados, em sua ordem declarada, e extras_json; nulls explícitos e timezone UTC. Datas/decimais normalizados permitem canonizar repetições lexicalmente distintas com conteúdo equivalente.
+- Para registros já rejeitados pela tipagem, hash_conteudo usa `invalid_v1:` e campos lexicais, corrupção e extras sem caminho técnico. Isso impede que um decimal inválido arredondado pelo cast pareça idêntico à versão válida; esses registros nunca são promovidos.
 - occurrence_id: SHA-256 de fonte, arquivo, hash lexical, lote, contrato e payload original. Cópias indistinguíveis dentro do mesmo arquivo são agrupadas com multiplicidade; não é inventado número de linha.
 - event_key: SHA-256 da identidade de origem serializada em JSON.
 - version_id SCD2: SHA-256 de fonte, chave de entidade e início de vigência.
