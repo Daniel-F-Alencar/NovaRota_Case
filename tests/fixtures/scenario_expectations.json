@@ -9,5 +9,14 @@
   "cancelled_card": "K001",
   "before_cancel": "T_BEFORE_CANCEL",
   "after_cancel": "T_AFTER_CANCEL",
-  "cancelled_transaction": "T_CANCELLED"
+  "cancelled_transaction": "T_CANCELLED",
+  "invalid_cpf": {"customer": "C_BAD", "value": "INVALIDO"},
+  "foreign_currency": {"transaction": "T_FX", "currency": "USD"},
+  "orphan_links": [
+    {"source": "contas_cdc", "key": "id_conta", "id": "A_ORPHAN", "field": "id_cliente", "value": "C_MISSING", "parent_source": "clientes_cdc", "parent_key": "id_cliente"},
+    {"source": "cartoes_cdc", "key": "id_cartao", "id": "K_ORPHAN", "field": "id_conta", "value": "A_MISSING", "parent_source": "contas_cdc", "parent_key": "id_conta"},
+    {"source": "transacoes", "key": "id_transacao", "id": "T_ORPHAN", "field": "id_cartao", "value": "K_MISSING", "parent_source": "cartoes_cdc", "parent_key": "id_cartao"},
+    {"source": "eventos_risco", "key": "id_evento", "id": "E_ORPHAN", "field": "id_transacao", "value": "T_MISSING", "parent_source": "transacoes", "parent_key": "id_transacao"},
+    {"source": "estornos", "key": "id_estorno", "id": "R_ORPHAN", "field": "id_transacao", "value": "T_MISSING", "parent_source": "transacoes", "parent_key": "id_transacao"}
+  ]
 }

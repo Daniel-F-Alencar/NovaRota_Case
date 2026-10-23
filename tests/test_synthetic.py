@@ -81,6 +81,23 @@ class SyntheticTests(unittest.TestCase):
             evolution = read_manifest(manifests[-1])
             self.assertTrue(any(e["rows"] == 0 and e["source"] == "clientes_cdc" for e in evolution["files"]))
 
+    def test_invalid_links_and_transaction_versions_are_explicit(self):
+        expected = json.loads((Path(__file__).parent / "fixtures/scenario_expectations.json").read_text())
+        batches = fixed_scenarios(date(2026, 6, 30))
+        rows = {source: [row for batch in batches.values() for row in batch[source]] for source in SOURCES}
+        for link in expected["orphan_links"]:
+            actual = next(row for row in rows[link["source"]] if row[link["key"]] == link["id"])
+            self.assertEqual(actual[link["field"]], link["value"])
+            parent_ids = {row[link["parent_key"]] for row in rows[link["parent_source"]]}
+            self.assertNotIn(link["value"], parent_ids)
+        bad_cpf = expected["invalid_cpf"]
+        self.assertEqual(next(row for row in rows["clientes_cdc"] if row["id_cliente"] == bad_cpf["customer"])["cpf"], bad_cpf["value"])
+        fx = expected["foreign_currency"]
+        self.assertEqual(next(row for row in rows["transacoes"] if row["id_transacao"] == fx["transaction"])["moeda"], fx["currency"])
+        versions = [row for row in rows["transacoes"] if row["id_transacao"] == "T_VERSION"]
+        self.assertEqual([(row["sequencia_origem"], row["status_transacao"]) for row in versions], [("1", "PENDENTE"), ("2", "APROVADA")])
+        self.assertTrue(any(row["id_cartao"] == "K004" and row["operacao"] == "D" for row in rows["cartoes_cdc"]))
+
     def test_out_of_order_events_and_seed_variation(self):
         records = build_records(GeneratorConfig())
         initial, incremental, late = (records[batch] for batch in BATCH_IDS[:3])
