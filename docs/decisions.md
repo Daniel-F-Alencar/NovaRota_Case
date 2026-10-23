@@ -1,0 +1,74 @@
+# Decisões de arquitetura
+
+
+## ADR-001 — Pacote Python e estrutura do case
+
+**Estado:** adotada.
+
+**Contexto:** o briefing sugere src, config, ingestion, silver, gold, quality, observability, tests, sql, notebooks e documentação de arquitetura/decisões. O projeto já possui módulos importados pelos notebooks.
+
+**Decisão:** usar layout src com namespace `novarota` e módulos irmãos por responsabilidade. Configuração passa a pacote `novarota.config`, preservando o import público. Silver, Gold e qualidade têm diretórios reservados com README até a respectiva implementação. Arquivos de ambiente ficam na pasta config da raiz.
+
+**Alternativas:** módulos genéricos diretamente em src; código de todas as camadas em notebooks; camadas de transformação dentro de ingestion.
+
+**Consequências:** instalação e imports têm um namespace único; notebooks permanecem pontos de entrada; a estrutura acrescenta um nível ao exemplo do briefing. A verificação de empacotamento acompanha a mudança de caminhos. Reexecução dos testes após esta reorganização ainda não foi realizada.
+
+## ADR-002 — Databricks gerenciado e execução finita
+
+**Estado:** adotada e demonstrada no caminho Bronze.
+
+**Contexto:** o candidato usa Free Edition e dados sintéticos, sem armazenamento externo configurado.
+
+**Decisão:** Volume Unity Catalog, tabelas Delta gerenciadas, Serverless e Auto Loader AvailableNow, com fontes sequenciais e uma execução concorrente por dataset.
+
+**Alternativas:** bucket externo e cluster clássico; ingestão batch com descoberta de arquivos desenvolvida no projeto.
+
+**Consequências:** setup pequeno e reproduzível na conta demonstrada. A capacidade/cota da conta limita volume e paralelismo; os resultados da amostra não comprovam desempenho em escala.
+
+## ADR-003 — Bronze lexical e schema rescue
+
+**Estado:** adotada e demonstrada.
+
+**Contexto:** é necessário preservar valores inválidos e evolução das fontes para tratamento posterior.
+
+**Decisão:** contratos explícitos de leitura como strings, metadados de origem, hash lexical canônico e campos extras em rescue. Sem deduplicação ou filtro de elegibilidade na Bronze.
+
+**Alternativas:** inferir tipos automaticamente; descartar linhas inválidas; promover automaticamente toda coluna nova.
+
+**Consequências:** conteúdo abc, duplicatas e dispositivo adicional permanecem auditáveis. Consumidores da Silver precisam tipar e validar deliberadamente. O arquivo original continua preservado no Volume.
+
+## ADR-004 — Idempotência e auditabilidade
+
+**Estado:** adotada na Bronze; extensão Silver proposta.
+
+**Contexto:** repetição de tentativa e duplicata de negócio são situações distintas.
+
+**Decisão:** publicar arquivos imutáveis com manifesto; checkpoint por fonte; reconciliar antes/depois; distinguir batch_id de run_id. Registrar falha e propagar erro. Silver deverá deduplicar identidades/versionar conteúdo e usar MERGE com origem única por chave.
+
+**Alternativas:** sobrescrever arquivos publicados; apagar checkpoints para reprocessar; usar hash como chave única Bronze.
+
+**Consequências:** replay operacional não acrescenta arquivos já reconciliados, mas duplicatas recebidas em arquivos novos continuam na Bronze. Dados e auditoria não formam commit único; recuperação exige reconciliação. A extensão Silver ainda precisa de implementação e evidência próprias.
+
+## ADR-005 — Histórico corrigível por eventos atrasados
+
+**Estado:** proposta para a Silver.
+
+**Contexto:** C001-v2 chega após v3; cancelamento e deleção não podem alterar retroativamente o estado em compras anteriores à sua vigência.
+
+**Decisão:** guardar eventos CDC canônicos e reconstruir intervalos [valid_from, valid_to) das chaves afetadas; usar vigência e sequência da origem e manter deleção lógica. Classificar conflitos sem escolher pela chegada. Preservar primeira disponibilidade para o futuro consumo por data de corte.
+
+**Alternativas:** dimensão somente atual; aplicar SCD2 na ordem de chegada; descartar atraso por watermark de tempo do evento.
+
+**Consequências:** permite corrigir intervalos e relações temporais; aumenta o custo de reavaliar dependentes. Na amostra, varredura completa favorece clareza e correção. A reconstrução de features sem dados futuros ficará na mudança Gold.
+
+## ADR-006 — Histórico Git e branches por mudança
+
+**Estado:** adotada a partir desta organização.
+
+**Contexto:** o avaliador observará o histórico; já existiam oito commits reais antes desta etapa.
+
+**Decisão:** preservar a história existente. `main` mantém a base Bronze demonstrada; `develop` integra trabalho em andamento. Usar `feature/ingestion-framework`, `feature/dq-and-scd` e `feature/gold-data-products` conforme o escopo. Integrações em develop usam merge com histórico da branch preservado.
+
+**Alternativas:** reiniciar Git; reescrever commits antigos para simular branches; usar apenas um commit com a entrega completa.
+
+**Consequências:** evolução anterior continua legível e a adoção do fluxo ocorre agora. Mensagens Conventional Commits descrevem o diff real: feat para comportamento novo, refactor para organização sem novo comportamento, test para trabalho de testes e docs para documentação. Os exemplos do briefing orientam o formato; não são uma lista de commits a fabricar. O projeto ainda não possui remoto configurado.
