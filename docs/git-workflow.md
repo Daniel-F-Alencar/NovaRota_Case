@@ -38,6 +38,6 @@ git merge --ff-only develop
 - `test: cobre conflitos e eventos CDC atrasados`
 - `docs: registra evidências da demonstração Silver`
 
-O escopo de teste deve ser solicitado e seus resultados registrados antes de afirmar que uma revisão está validada. Os 34 testes locais aprovados atualmente documentados pertencem à revisão anterior à reorganização.
+Registrar a revisão, os comandos executados e seus resultados antes de afirmar que uma entrega está validada. Os 34 testes locais aprovados atualmente documentados pertencem à revisão anterior à reorganização.
 
 Depois da implementação e revisão, integrar a feature em develop com merge que preserve seus commits. A promoção de develop para main acompanha uma entrega demonstrada e revisada. Nenhum commit de implementação Silver/Gold deve ser criado enquanto só existirem propostas e diretórios reservados.
