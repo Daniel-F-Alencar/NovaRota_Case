@@ -20,4 +20,4 @@ Verificações executadas:
 
 O arquivo canônico `dist/novarota_bronze_demo.zip` também foi regenerado com o mesmo conteúdo. O nome da pasta externa sugerido pelo Databricks pode ser o nome do ZIP mais timestamp; a instrução de importação foi ajustada para não depender de um nome externo fixo.
 
-Status: correção local verificada; reimportação no Databricks e execução das seis fontes continuam pendentes. Nenhuma pasta ou recurso remoto da tentativa anterior foi apagado.
+Atualização: o candidato confirmou a reimportação e forneceu o resultado BRONZE_DEMO_PASSED em modo FRESH. Ver [evidência da execução](bronze-demo-passed.md). Nenhuma pasta ou recurso remoto da tentativa anterior foi apagado.

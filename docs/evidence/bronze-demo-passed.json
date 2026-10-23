@@ -1,0 +1,12 @@
+{
+  "status": "BRONZE_DEMO_PASSED",
+  "proof_mode": "FRESH",
+  "rows_by_source": {"clientes_cdc": 14, "contas_cdc": 16, "cartoes_cdc": 21, "transacoes": 54, "eventos_risco": 3, "estornos": 3},
+  "run_ids": ["58198cd0b51e4ef1b9263d3c424f4256", "df8d7a3461da48ba987052c65200f1f2", "0b4a5648b158472cb2e24b690e3feccc", "abdc49c35cff434bbe55618634447baa", "759db7db5b154051a50d0c730d769b73"],
+  "negative_run_id": "a0eadd6a8fb94273bbaa5a2ac4c6e9ec",
+  "catalog": "workspace",
+  "bronze_schema": "novarota_case01_bronze",
+  "volume": "/Volumes/workspace/novarota_ops/case01_files",
+  "checks": ["six_sources", "manifest_reconciliation", "initial", "increment", "replay", "late_files", "raw_duplicates", "raw_invalid_value", "schema_rescue", "canonical_hash", "negative_audit"],
+  "finished_at": "2026-10-23T23:06:43.892335+00:00"
+}

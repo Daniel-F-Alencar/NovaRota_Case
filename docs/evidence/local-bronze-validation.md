@@ -27,3 +27,5 @@ No perfil sample, as contagens totais por lote foram 79, 21, 10 e 1. A massa dem
 Isso comprova geração, publicação local, testes puros e empacotamento. As expressões Spark de hash/metadados, o filesystem do Volume, ingestão das seis fontes e escrita da auditoria no Databricks continuam pendentes da execução do notebook 01_bronze_demo. A amostra inicial aprovada foi documentada separadamente e não é substituída por esses testes locais.
 
 Após a falha de importação reportada pelo candidato, o empacotamento foi corrigido para declarar pastas explicitamente. A suíte passou a 34 testes; ver [registro da correção](import-archive-fix.md). Os resultados de integridade anteriores não demonstravam aceitação pelo importador Databricks.
+
+Atualização posterior: o candidato forneceu o resumo da execução integrada BRONZE_DEMO_PASSED em modo FRESH; ver [evidência remota](bronze-demo-passed.md). As pendências descritas acima representam o estado na data da validação local, antes desse resultado.

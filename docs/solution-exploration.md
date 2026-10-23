@@ -1,6 +1,6 @@
 # Exploração da solução NovaRota
 
-Data: 2026-10-23. Estado: proposta para revisão, sem execução.
+Data: 2026-10-23. Estado: visão do case completo; fundação e Bronze concluídas, com resumo de execução fornecido pelo candidato. Silver e Gold permanecem propostas futuras. As decisões abaixo distinguem esses estados.
 
 ## Problema e resultado esperado
 
@@ -43,13 +43,13 @@ Fluxo finito por execução: processar arquivos disponíveis, encerrar a Bronze,
 - Não depender de bucket cloud externo, DBFS mounts, RDDs ou configuração de cluster clássico.
 - Setup, gerador, carga de lotes e pipeline devem funcionar dentro do workspace usando recursos disponíveis. Execução local auxilia testes; evidência local não substitui execução Databricks.
 
-Free Edition é serverless e tem cotas. A documentação oficial recomenda `AvailableNow` para ingestão incremental em jobs serverless. A disponibilidade efetiva de Volumes, Auto Loader e criação de schemas será verificada no primeiro smoke test; ainda não foi verificada na conta do candidato.
+Free Edition é serverless e tem cotas. Volumes, Auto Loader e criação de schemas foram exercitados na amostra inicial. A demonstração das seis fontes também concluiu, conforme o [resumo fornecido pelo candidato](evidence/bronze-demo-passed.md). Isso confirma o caminho do case na amostra, sem demonstrar desempenho em escala.
 
 ## Dados e lacunas do briefing
 
 Usar seis fontes: clientes CDC, contas CDC e cartões CDC em JSON Lines; transações, eventos de risco e estornos em CSV. Arquivos de transações serão organizados por data do evento, independentemente da data em que chegam.
 
-Perfil inicial proposto: 100 clientes, aproximadamente 150 contas, 200 cartões e 10 mil transações distribuídas em seis meses. São metas configuráveis, não volumetria já gerada. Uma amostra menor de cenários fixos terá resultados esperados explícitos.
+Perfis implementados: sample com 10 clientes iniciais e 40 transações de fundo; demo com 100 clientes e 10 mil transações de fundo. Fixtures acrescentam versões, duplicatas e valores inválidos. Ambos foram gerados localmente; a execução Bronze informada usa sample e contém 111 linhas nas seis fontes. A massa demo ainda não foi demonstrada no Databricks.
 
 | Lacuna ou ambiguidade | Decisão proposta |
 | --- | --- |
@@ -112,8 +112,8 @@ Usar explain e query profile disponível no serverless para discutir estratégia
 Documentar papéis de ingestão, transformação, consumo Gold e Data Science em Unity Catalog. Demonstrar apenas permissões que a conta permitir; administração corporativa, rede privada e operação com SLA ficam como desenho de produção.
 
 
-1. `bootstrap-synthetic-bronze`: setup reproduzível, contratos sintéticos, lotes determinísticos, Auto Loader e Bronze com metadados. Esta é a proposta formal atual.
-2. `build-silver-cdc-quality`: contratos tipados, quarentena, SCD2, MERGE, atrasos e reprocessamento. Criar proposta após validar a fundação.
+1. `bootstrap-synthetic-bronze`: setup reproduzível, contratos sintéticos, lotes determinísticos, Auto Loader e Bronze com metadados. Concluída e arquivada em 2026-10-23.
+2. `build-silver-cdc-quality`: contratos tipados, quarentena, SCD2, MERGE, atrasos e reprocessamento. Próxima proposta, a partir da fundação demonstrada.
 3. `publish-gold-risk-products`: fato, dimensões, agregações, features com corte temporal e SQL avançado.
 4. `demonstrate-integrated-case`: demonstração integrada, reconciliação de cenários e evidências finais. Testes unitários, de transformação e documentação já acompanham as mudanças anteriores.
 
@@ -128,4 +128,4 @@ Git deverá registrar evolução real com conventional commits. Não fabricar co
 
 ## Próxima validação
 
-Revisar a primeira proposta e suas premissas de negócio. Na implementação, verificar recursos da conta e executar uma primeira carga real antes de ampliar a massa. IDs de catálogo, schema e Volume são parâmetros de setup, não decisões arquiteturais pendentes.
+Detalhar e revisar a mudança Silver antes da implementação. A entrega final deverá complementar o resumo da Bronze com export do notebook incluindo outputs; esse export ainda não foi recebido. IDs de catálogo, schema e Volume permanecem parâmetros de setup.

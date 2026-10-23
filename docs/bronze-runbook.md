@@ -1,6 +1,6 @@
 # Executar a demonstracao Bronze
 
-Pre-requisito verificado: amostra `00_workspace_smoke` aprovada no Databricks Free Edition com Auto Loader, Volume UC, Delta, CSV rescue e replay. O pacote a seguir amplia o teste para as seis fontes; ainda precisa de sua propria evidencia de execucao.
+Pre-requisito verificado: amostra `00_workspace_smoke` aprovada no Databricks Free Edition com Auto Loader, Volume UC, Delta, CSV rescue e replay. A demonstracao das seis fontes tambem foi aprovada: ver [resumo fornecido pelo candidato](evidence/bronze-demo-passed.md), com 111 linhas em modo FRESH.
 
 ## Importar no Databricks
 
@@ -10,7 +10,7 @@ Pre-requisito verificado: amostra `00_workspace_smoke` aprovada no Databricks Fr
 4. Manter `catalog=workspace`, `dataset_id=case01` e `profile=sample` na primeira execucao desta conta. Os nomes sao parametros, nao dependencias fixas. Se o catalogo da conta for outro, ajustar antes de executar setup.
 5. Se o pacote nao for localizado, informar em `project_root` o caminho absoluto da pasta que contem o notebook e `novarota/`, por exemplo `/Workspace/Users/<sua-conta>/novarota_case`. A importacao segue o suporte oficial a modulos de workspace; nao depende de `os.getcwd()`.
 
-Se a tentativa anterior retornou `RESOURCE_DOES_NOT_EXIST` para uma pasta `novarota`, usar o ZIP corrigido gerado por `python scripts/build_artifacts.py --name novarota_bronze_demo_v2.zip`. Ele declara explicitamente as cinco pastas antes dos arquivos. Importar novamente a partir da pasta da conta, em vez de dentro de uma pasta de pacote parcialmente importada. A confirmacao da correcao no Databricks ainda depende dessa nova importacao.
+Se a tentativa anterior retornou `RESOURCE_DOES_NOT_EXIST` para uma pasta `novarota`, usar o ZIP corrigido gerado por `python scripts/build_artifacts.py --name novarota_bronze_demo_v2.zip`. Ele declara explicitamente as cinco pastas antes dos arquivos. Importar novamente a partir da pasta da conta, em vez de dentro de uma pasta de pacote parcialmente importada. O candidato confirmou a reimportacao e a execucao com sucesso em 2026-10-23.
 
 Recursos padrao criados: schema `workspace.novarota_case01_bronze`, schema de operacao `workspace.novarota_ops`, Volume `workspace.novarota_ops.case01_files` e tabela de eventos `workspace.novarota_ops.pipeline_events`. O catalogo precisa permitir criar schemas; o schema ops precisa permitir criar Volume e tabela. Sao usados recursos gerenciados, sem buckets ou credenciais cloud externos.
 
@@ -18,7 +18,7 @@ Recursos padrao criados: schema `workspace.novarota_case01_bronze`, schema de op
 
 Setup repetivel; verificacoes das expressoes Spark; geracao de quatro lotes fora da landing; publicacao e ingestao sequenciais; replay apos lote incremental; atrasos; evolucao CSV; reconciliacao dos payloads; falha esperada de lote nao publicado, com auditoria FAILED; resumo final.
 
-Saida final esperada (ainda nao e evidencia executada): `status=BRONZE_DEMO_PASSED`. Na primeira carga de um dataset vazio, `proof_mode=FRESH`. Reexecutar um dataset ja publicado mostra `RESUME`, preserva dados/checkpoints e pode exibir zero linhas adicionadas nas etapas. Use outro `dataset_id` para uma nova demonstracao inicial; nao apagar checkpoint.
+Saida final esperada e informada pelo candidato na execucao documentada: `status=BRONZE_DEMO_PASSED`. Na primeira carga de um dataset vazio, `proof_mode=FRESH`. Reexecutar um dataset ja publicado mostra `RESUME`, preserva dados/checkpoints e pode exibir zero linhas adicionadas nas etapas. Use outro `dataset_id` para uma nova demonstracao inicial; nao apagar checkpoint.
 
 O teste negativo imprime `EXPECTED_FAILURE` e logs de erro como parte do cenario. Ele captura apenas `BatchNotPublishedError`; qualquer outro erro continua interrompendo a demonstracao. Uma linha FAILED nesse run_id e esperada na auditoria. As demais execucoes precisam terminar SUCCEEDED.
 

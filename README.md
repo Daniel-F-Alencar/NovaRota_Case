@@ -38,5 +38,6 @@ Em outra máquina, seguir o [setup local](docs/local-development.md). O pacote n
 - [Amostra Databricks aprovada](docs/evidence/workspace-smoke-passed.md)
 - [Validação local do gerador e empacotamento](docs/evidence/local-bronze-validation.md)
 - [Correção da estrutura de pastas do ZIP](docs/evidence/import-archive-fix.md)
+- [Bronze das seis fontes aprovada — resumo da execução](docs/evidence/bronze-demo-passed.md)
 
 O objetivo é entregar os critérios completos do case progressivamente. Os artefatos da primeira mudança não demonstram, por si, conclusão das camadas seguintes.
