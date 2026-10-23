@@ -52,7 +52,7 @@ ADRs resumidas em 2026-10-23. Cada decisão indica seu estado e consequências. 
 
 ## ADR-005 — Histórico corrigível por eventos atrasados
 
-**Estado:** proposta para a Silver.
+**Estado:** implementada na Silver; demonstração remota pendente.
 
 **Contexto:** C001-v2 chega após v3; cancelamento e deleção não podem alterar retroativamente o estado em compras anteriores à sua vigência.
 

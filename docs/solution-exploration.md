@@ -1,6 +1,6 @@
 # Exploração da solução NovaRota
 
-Data: 2026-10-23. Estado: visão do case completo; fundação e Bronze concluídas, com resumo de execução fornecido pelo candidato. Silver e Gold permanecem propostas futuras. As decisões abaixo distinguem esses estados.
+Data: 2026-10-23. Estado: visão do case completo; fundação e Bronze concluídas, com resumo de execução registrado. Na feature/dq-and-scd, Silver implementada e aguardando demonstração real; Gold permanece futura. As decisões abaixo distinguem esses estados.
 
 ## Problema e resultado esperado
 
@@ -114,7 +114,7 @@ Documentar papéis de ingestão, transformação, consumo Gold e Data Science em
 ## Etapas de implementação
 
 1. `bootstrap-synthetic-bronze`: setup reproduzível, contratos sintéticos, lotes determinísticos, Auto Loader e Bronze com metadados. Concluída e arquivada em 2026-10-23.
-2. `build-silver-cdc-quality`: contratos tipados, quarentena, SCD2, MERGE, atrasos e reprocessamento. Próxima proposta, a partir da fundação demonstrada.
+2. Silver: contratos tipados, quarentena, SCD2, MERGE, atrasos e reprocessamento implementados na feature/dq-and-scd. Execução real e critérios adversos ainda pendentes.
 3. `publish-gold-risk-products`: fato, dimensões, agregações, features com corte temporal e SQL avançado.
 4. `demonstrate-integrated-case`: demonstração integrada, reconciliação de cenários e evidências finais. Testes unitários, de transformação e documentação já acompanham as mudanças anteriores.
 
@@ -129,4 +129,4 @@ Git deverá registrar evolução real com conventional commits. Não fabricar co
 
 ## Próxima validação
 
-Detalhar e revisar a mudança Silver antes da implementação. A entrega final deverá complementar o resumo da Bronze com export do notebook incluindo outputs; esse export ainda não foi recebido. IDs de catálogo, schema e Volume permanecem parâmetros de setup.
+Executar 02_silver_demo no Databricks e registrar seus resultados, seguidos das evidências específicas de atraso, conflito, replay e recuperação. A entrega final deverá complementar os resumos com export dos notebooks incluindo outputs. IDs de catálogo, schema e Volume permanecem parâmetros de setup.

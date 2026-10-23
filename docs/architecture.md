@@ -1,6 +1,6 @@
 # Arquitetura NovaRota
 
-Estado em 2026-10-23: geração sintética, publicação, Bronze e auditoria implementadas. O candidato forneceu BRONZE_DEMO_PASSED em modo FRESH, com 111 linhas nas seis fontes. Silver tem desenho proposto; Gold e SQL analítico são etapas futuras.
+Estado em 2026-10-23: geração sintética, publicação, Bronze e auditoria implementadas, com BRONZE_DEMO_PASSED em modo FRESH e 111 linhas nas seis fontes. Na branch feature/dq-and-scd, Silver e qualidade estão implementadas, aguardando demonstração real. Gold e SQL analítico são etapas futuras.
 
 ## Fluxo de dados
 
@@ -18,7 +18,7 @@ flowchart LR
     F -. futuro .-> D[Features por data de corte e SQL]
 ```
 
-Linhas contínuas representam o caminho Bronze implementado. Linhas pontilhadas representam capacidades propostas ou futuras.
+Linhas contínuas representam o caminho Bronze demonstrado. As etapas de qualidade e Silver estão implementadas, ainda sem demonstração remota; Gold permanece futura.
 
 ## Organização do código
 
@@ -30,13 +30,13 @@ O layout sugerido no briefing é mantido dentro de `src/novarota/`, um namespace
 | src/novarota/synthetic/ | Contratos materializados e massa determinística | Implementado |
 | src/novarota/ingestion/ | Manifestos, publicação, Auto Loader, hash e reconciliação | Implementado |
 | src/novarota/observability/ | Auditoria e logs por tentativa | Implementado |
-| src/novarota/quality/ | Regras reutilizáveis e classificação de qualidade | Reservado para a Silver |
-| src/novarota/silver/ | Canonização financeira e histórico SCD2 | Proposta preparada |
+| src/novarota/quality/ | Regras reutilizáveis e contratos tipados | Implementado; demonstração pendente |
+| src/novarota/silver/ | Canonização, SCD2, MERGE e controle de tentativas | Implementado; demonstração pendente |
 | src/novarota/gold/ | Produtos de consumo e features | Futuro |
 | config/ | JSON de exemplo por ambiente, sem credenciais | Implementado |
 | tests/ | Verificações locais e fixtures independentes | 34 testes na última execução anterior à reorganização |
 | sql/ | Consultas analíticas versionadas | Futuro |
-| notebooks/ | Entradas de execução e demonstração | Smoke e Bronze implementados |
+| notebooks/ | Entradas de execução e demonstração | Smoke, Bronze e Silver implementados |
 | scripts/ | Build determinístico do pacote para importação | Implementado |
 | docs/ | Arquitetura, decisões, contratos, guias e evidências | Mantido com cada mudança |
 
@@ -61,7 +61,7 @@ Dados e auditoria não são uma transação única. Uma tentativa é identificad
 
 ## Evolução Silver
 
-O desenho Silver proposto contempla tipagem, quarentena, reavaliação de referências, ledger CDC, SCD2 e canonização financeira. Os intervalos de vigência serão semiabertos, com sequência da origem para desempate, conflitos explícitos e retomada idempotente. Inicialmente reler o inventário completo para a massa pequena; a implementação ainda deverá demonstrar seu comportamento real no Databricks. Ver [ADR-005](decisions.md#adr-005--histórico-corrigível-por-eventos-atrasados).
+A Silver implementa tipagem, quarentena, reavaliação de referências, ledger CDC, SCD2 e canonização financeira. Os intervalos de vigência são semiabertos, com sequência da origem para desempate, conflitos explícitos e lacunas quando um evento é rejeitado. O processamento relê um snapshot completo das seis fontes, fixado por versões Delta, e persiste staging Parquet por tentativa. Os destinos gerenciados são sincronizados por MERGE escopado pelo dataset e reconciliados antes da conclusão. Ver [contratos](silver-contracts.md), [runbook](silver-runbook.md) e ADR-005. O comportamento real ainda precisa ser demonstrado no Databricks.
 
 Gold calculará o produto financeiro e as features depois da Silver. A SCD2 de vigência não basta, sozinha, para reconstruir o conhecimento disponível no corte de um modelo; essa semântica será especificada na mudança Gold.
 

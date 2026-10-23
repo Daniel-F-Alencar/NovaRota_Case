@@ -4,10 +4,14 @@ Case de Engenharia de Dados Sênior em Databricks Free Edition, com dados inteir
 
 Estado: fundação e Bronze concluídas. A demonstração registrou BRONZE_DEMO_PASSED em modo FRESH: 111 linhas nas seis fontes, com reconciliação, replay, atraso, evolução de schema e auditoria verificados pelo notebook. Os 34 testes locais passaram antes dessa execução. Prata, SCD2, Ouro e consultas analíticas pertencem às mudanças seguintes.
 
+Na branch `feature/dq-and-scd`, a Silver está implementada e aguardando execução no Databricks: tipagem, qualidade, quarentena, canonização, SCD2, MERGE e retomada. Gold permanece futura. Os 34 testes citados acima pertencem à revisão Bronze; nenhuma nova execução de testes ou Spark foi realizada nesta etapa Silver.
+
 - [Acesso ao workspace e primeira amostra](docs/workspace-setup.md)
 - [Desenvolvimento local](docs/local-development.md)
 - [Notebook para verificar o workspace](notebooks/00_workspace_smoke.ipynb)
 - [Executar a Bronze das seis fontes](docs/bronze-runbook.md)
+- [Executar a Silver e consultar a quarentena](docs/silver-runbook.md)
+- [Contratos tipados e regras Silver](docs/silver-contracts.md)
 - [Contratos e cenários sintéticos](docs/data_contracts.md)
 - [Arquitetura](docs/architecture.md)
 - [Decisões e trade-offs (ADRs)](docs/decisions.md)
@@ -32,9 +36,9 @@ novarota-lakehouse-case/
 ├── src/novarota/
 │   ├── config/          # configuração validada
 │   ├── ingestion/       # publicação e Bronze incremental
-│   ├── silver/          # reservado; proposta CDC/SCD2
+│   ├── silver/          # canonização, SCD2, MERGE e retomada
 │   ├── gold/            # reservado; produtos futuros
-│   ├── quality/         # reservado; regras Silver futuras
+│   ├── quality/         # contratos tipados e regras reutilizáveis
 │   ├── observability/   # auditoria e logs
 │   └── synthetic/       # geração das fontes fictícias
 ├── config/              # exemplos de parâmetros de ambiente
@@ -57,6 +61,8 @@ A base Bronze e a organização do repositório compõem a entrega inicial em `m
 ## Executar
 
 No Databricks, importar o ZIP criado por `python scripts/build_artifacts.py`, abrir `novarota_case/01_bronze_demo` e executar em Serverless com `catalog=workspace`, `dataset_id=case01` e `profile=sample`. O pacote fica ao lado do notebook; regras permanecem em módulos Python. O [runbook](docs/bronze-runbook.md) detalha permissões, retomada e coleta de evidência.
+
+Para continuar a partir da Bronze existente, gerar `python scripts/build_artifacts.py --name novarota_silver_demo.zip`, importar o ZIP e executar **02_silver_demo** no mesmo workspace, com `dataset_id=case01`. O [runbook Silver](docs/silver-runbook.md) orienta configuração, retomada e interpretação dos resultados.
 
 Para geração local, preparar Python e apontar para as fontes:
 
