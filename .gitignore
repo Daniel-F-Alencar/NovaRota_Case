@@ -6,11 +6,13 @@ build/
 dist/
 .coverage
 .pytest_cache/
+.test-tmp/
 .env
 .env.*
 !.env.example
 config/*.local.json
 data/generated/
 data/landing/
+data/published/
 *.log
 .DS_Store

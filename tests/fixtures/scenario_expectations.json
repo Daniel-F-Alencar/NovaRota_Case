@@ -1,0 +1,13 @@
+{
+  "partial_refund": {"transaction": "T_PARTIAL", "amount": "100.00", "refund": "R_PARTIAL", "refund_amount": "30.00", "expected_net": "70.00"},
+  "full_refund": {"transaction": "T_FULL", "amount": "80.00", "refund": "R_FULL", "refund_amount": "80.00", "expected_net": "0.00"},
+  "duplicate_transaction": "T_DUP",
+  "duplicate_cdc": "C001-v1",
+  "customer_versions": ["C001-v1", "C001-v2", "C001-v3"],
+  "invalid_value": {"transaction": "T_INVALID_AMOUNT", "value": "abc"},
+  "schema_evolution": {"transaction": "T_SCHEMA", "field": "dispositivo", "value": "mobile-sintetico"},
+  "cancelled_card": "K001",
+  "before_cancel": "T_BEFORE_CANCEL",
+  "after_cancel": "T_AFTER_CANCEL",
+  "cancelled_transaction": "T_CANCELLED"
+}
