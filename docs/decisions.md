@@ -1,13 +1,14 @@
 # Decisões de arquitetura
 
+ADRs resumidas em 2026-10-23. Cada decisão indica seu estado e consequências. Requisitos de negócio estão nos contratos de dados e na exploração da solução.
 
 ## ADR-001 — Pacote Python e estrutura do case
 
 **Estado:** adotada.
 
-**Contexto:** o briefing sugere src, config, ingestion, silver, gold, quality, observability, tests, sql, notebooks e documentação de arquitetura/decisões. O projeto já possui módulos importados pelos notebooks.
+**Contexto:** o briefing sugere src, config, ingestion, silver, gold, quality, observability, tests, sql, notebooks e documentação de arquitetura/decisões. O candidato escolheu requirements.txt para documentar dependências. O projeto já possui módulos importados pelos notebooks.
 
-**Decisão:** usar layout src com namespace `novarota` e módulos irmãos por responsabilidade. Configuração passa a pacote `novarota.config`, preservando o import público. Silver, Gold e qualidade têm diretórios reservados com README até a respectiva implementação. Arquivos de ambiente ficam na pasta config da raiz.
+**Decisão:** usar layout src com namespace `novarota` e módulos irmãos por responsabilidade. Configuração passa a pacote `novarota.config`, preservando o import público. Silver, Gold e qualidade têm diretórios reservados com README até a respectiva implementação. Arquivos de ambiente ficam na pasta config da raiz. A execução local usa PYTHONPATH=src e requirements.txt; Spark/Delta são fornecidos pelo Databricks.
 
 **Alternativas:** módulos genéricos diretamente em src; código de todas as camadas em notebooks; camadas de transformação dentro de ingestion.
 
@@ -67,8 +68,7 @@
 
 **Contexto:** o avaliador observará o histórico; já existiam oito commits reais antes desta etapa.
 
-**Decisão:** preservar a história existente. `main` mantém a base Bronze demonstrada; `develop` integra trabalho em andamento. Usar `feature/ingestion-framework`, `feature/dq-and-scd` e `feature/gold-data-products` conforme o escopo. Integrações em develop usam merge com histórico da branch preservado.
 
 **Alternativas:** reiniciar Git; reescrever commits antigos para simular branches; usar apenas um commit com a entrega completa.
 
-**Consequências:** evolução anterior continua legível e a adoção do fluxo ocorre agora. Mensagens Conventional Commits descrevem o diff real: feat para comportamento novo, refactor para organização sem novo comportamento, test para trabalho de testes e docs para documentação. Os exemplos do briefing orientam o formato; não são uma lista de commits a fabricar. O projeto ainda não possui remoto configurado.
+**Consequências:** evolução anterior continua legível e a exclusão de arquivos de planejamento respeita a orientação do candidato. O backup local preserva os objetos e hashes originais; ele não é publicado. Mensagens Conventional Commits descrevem o diff real: feat para comportamento novo, refactor para organização sem novo comportamento, test para trabalho de testes e docs para documentação. Os exemplos do briefing orientam o formato; não são uma lista de commits a fabricar.

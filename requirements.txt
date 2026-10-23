@@ -1,0 +1,4 @@
+# Python >= 3.10.
+# Os comandos locais e a suite unittest usam apenas a biblioteca padrao.
+# Spark/PySpark e Delta sao fornecidos pelo Databricks Serverless.
+# Executar os modulos locais com PYTHONPATH=src; consultar docs/local-development.md.

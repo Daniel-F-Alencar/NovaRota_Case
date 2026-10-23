@@ -2,6 +2,7 @@
 
 Case de Engenharia de Dados Sênior em Databricks Free Edition, com dados inteiramente sintéticos.
 
+Estado: fundação e Bronze concluídas. A demonstração registrou BRONZE_DEMO_PASSED em modo FRESH: 111 linhas nas seis fontes, com reconciliação, replay, atraso, evolução de schema e auditoria verificados pelo notebook. Os 34 testes locais passaram antes dessa execução. Prata, SCD2, Ouro e consultas analíticas pertencem às mudanças seguintes.
 
 - [Acesso ao workspace e primeira amostra](docs/workspace-setup.md)
 - [Desenvolvimento local](docs/local-development.md)
@@ -13,9 +14,7 @@ Case de Engenharia de Dados Sênior em Databricks Free Edition, com dados inteir
 - [Branches e fluxo de commits](docs/git-workflow.md)
 
 - [Exploração e proposta de solução](docs/solution-exploration.md)
-
-O ciclo é Explore → Propose → Review → Apply → Archive. A primeira mudança cobre a fundação, os dados sintéticos e a Bronze; mudanças seguintes cobrirão Prata, Ouro e demonstração integrada. Testes e documentação acompanham cada mudança.
-
+O desenvolvimento segue etapas de fundação/Bronze, Silver, Gold e demonstração integrada. O desenho e o estado de cada camada estão em [arquitetura](docs/architecture.md) e [decisões](docs/decisions.md). Testes e documentação acompanham as mudanças.
 
 ## Referências
 
@@ -29,7 +28,7 @@ A estrutura sugerida pelo case é aplicada com um pacote Python `novarota` dentr
 ```text
 novarota-lakehouse-case/
 ├── README.md
-├── pyproject.toml
+├── requirements.txt
 ├── src/novarota/
 │   ├── config/          # configuração validada
 │   ├── ingestion/       # publicação e Bronze incremental
@@ -53,15 +52,18 @@ novarota-lakehouse-case/
 
 Os diretórios reservados contêm README explicando seu escopo. Configuração de código fica em `src/novarota/config/`; arquivos JSON de ambiente ficam em `config/`. Os imports públicos existentes, como `from novarota.config import PipelineConfig`, permanecem iguais.
 
-A reorganização está integrada em `develop`; `main` mantém a base Bronze demonstrada. Ver [fluxo Git](docs/git-workflow.md). Os 34 testes aprovados são anteriores à reorganização; a suíte não foi reexecutada nesta etapa.
+A base Bronze e a organização do repositório compõem a entrega inicial em `main`; `develop` integra as próximas etapas. Ver [fluxo Git](docs/git-workflow.md). Os 34 testes aprovados são anteriores à reorganização; a suíte não foi reexecutada nesta etapa.
 
 ## Executar
 
 No Databricks, importar o ZIP criado por `python scripts/build_artifacts.py`, abrir `novarota_case/01_bronze_demo` e executar em Serverless com `catalog=workspace`, `dataset_id=case01` e `profile=sample`. O pacote fica ao lado do notebook; regras permanecem em módulos Python. O [runbook](docs/bronze-runbook.md) detalha permissões, retomada e coleta de evidência.
 
-Para geração local, a venv já preparada nesta sessão permite:
+Para geração local, preparar Python e apontar para as fontes:
 
 ```powershell
+python -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
+$env:PYTHONPATH = (Resolve-Path src).Path
 .\.venv\Scripts\python.exe -m novarota generate --output data/generated/sample --profile sample
 .\.venv\Scripts\python.exe -m unittest discover -s tests -v
 ```

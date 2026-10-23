@@ -1,5 +1,6 @@
 # Arquitetura NovaRota
 
+Estado em 2026-10-23: geração sintética, publicação, Bronze e auditoria implementadas. O candidato forneceu BRONZE_DEMO_PASSED em modo FRESH, com 111 linhas nas seis fontes. Silver tem desenho proposto; Gold e SQL analítico são etapas futuras.
 
 ## Fluxo de dados
 
@@ -21,7 +22,7 @@ Linhas contínuas representam o caminho Bronze implementado. Linhas pontilhadas 
 
 ## Organização do código
 
-O layout sugerido no briefing é mantido dentro de `src/novarota/`, um namespace próprio para instalação, imports de notebooks e empacotamento. A estrutura local `novarota-lakehouse-case/` corresponde à raiz de exemplo `case-senior/`.
+O layout sugerido no briefing é mantido dentro de `src/novarota/`, um namespace próprio para imports locais, notebooks e empacotamento. A estrutura local `novarota-lakehouse-case/` corresponde à raiz de exemplo `case-senior/`. Dependências e execução são documentadas em requirements.txt e no guia local.
 
 | Diretório | Responsabilidade | Estado |
 | --- | --- | --- |
@@ -60,6 +61,7 @@ Dados e auditoria não são uma transação única. Uma tentativa é identificad
 
 ## Evolução Silver
 
+O desenho Silver proposto contempla tipagem, quarentena, reavaliação de referências, ledger CDC, SCD2 e canonização financeira. Os intervalos de vigência serão semiabertos, com sequência da origem para desempate, conflitos explícitos e retomada idempotente. Inicialmente reler o inventário completo para a massa pequena; a implementação ainda deverá demonstrar seu comportamento real no Databricks. Ver [ADR-005](decisions.md#adr-005--histórico-corrigível-por-eventos-atrasados).
 
 Gold calculará o produto financeiro e as features depois da Silver. A SCD2 de vigência não basta, sozinha, para reconstruir o conhecimento disponível no corte de um modelo; essa semântica será especificada na mudança Gold.
 

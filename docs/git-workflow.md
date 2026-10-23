@@ -1,18 +1,17 @@
 # Fluxo Git do case
 
-O repositório fica em `C:\programming\novarota-lakehouse-case`. Os commits anteriores à organização de branches foram preservados com suas datas e conteúdo reais.
 
 ## Branches
 
 | Branch | Uso |
 | --- | --- |
-| main | Base Bronze demonstrada e evidência registrada |
+| main | Entrega inicial Bronze, organização e evidência registrada |
 | develop | Integração da organização e propostas em andamento |
 | feature/ingestion-framework | Organização modular da fundação/ingestão |
 | feature/dq-and-scd | Proposta e implementação futura de qualidade e histórico |
 | feature/gold-data-products | Reservada para o trabalho Gold |
 
-Branches feature são locais. Gold ainda não tem implementação. Uma branch existir não significa que sua capacidade esteja concluída. Atualmente não há remoto Git configurado; commits e merges desta sessão são locais.
+Gold ainda não tem implementação. Uma branch existir não significa que sua capacidade esteja concluída. Destino da publicação privada: [Daniel-F-Alencar/NovaRota_Case](https://github.com/Daniel-F-Alencar/NovaRota_Case). As cinco branches fazem parte da publicação inicial.
 
 ## Inspecionar o estado
 
@@ -32,6 +31,7 @@ git switch feature/dq-and-scd
 git merge --ff-only develop
 ```
 
+Implementar a Silver em incrementos e selecionar arquivos explicitamente antes de cada commit. Exemplos de mensagens para quando o diff correspondente existir:
 
 - `feat: implementa canonização de eventos CDC`
 - `refactor: separa regras de qualidade em módulo reutilizável`

@@ -11,6 +11,7 @@ Quando o workspace abrir, copie o endereco da barra do navegador. Esse endereco 
 3. Preencha o parametro `catalog` com o catalogo identificado. O schema isolado padrao e `novarota_smoke`.
 4. Execute as celulas na ordem. O notebook cria schema/Volume dedicados, publica um CSV com um registro, ingere via Auto Loader e publica um segundo CSV com coluna nova.
 5. Confira a saida final `status: PASSED`, duas linhas e o campo adicional em `_rescued_data`. O notebook testa tambem replay e preservacao do estado ao repetir setup.
+6. Exporte o notebook com saidas e registre data, parametros, status e resultados em `docs/evidence/`. Se houver erro, preserve a mensagem completa e a celula correspondente; nao registre a verificacao como concluida.
 
 Essa amostra ainda precisa ser executada na conta do candidato. Sua existencia no repositorio ou validacao de sintaxe local nao demonstra suporte real do workspace.
 

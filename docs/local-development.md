@@ -5,15 +5,16 @@ Python 3.10+ executa o gerador e os testes sem Spark ou dependências externas. 
 ```powershell
 cd C:\programming\novarota-lakehouse-case
 python -m venv .venv
-.\.venv\Scripts\python.exe -m pip install -e .
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
+$env:PYTHONPATH = (Resolve-Path src).Path
 .\.venv\Scripts\python.exe -m unittest discover -s tests -v
 ```
 
 Se `python` abrir a Microsoft Store, instale Python ou use o executável que já estiver disponível. Nesta sessão foi usado o Python 3.12.14 do runtime do app; esse caminho não é dependência do projeto. Usar diretamente o executável da venv evita depender da política de scripts do PowerShell.
 
-Nesta sessão uma `.venv` já foi criada e o wheel 0.1.0 foi instalado nela. O comando `.\.venv\Scripts\python.exe -m novarota --version` funciona sem ativar scripts.
+O requirements.txt não declara dependências externas porque os comandos locais usam a biblioteca padrão. Spark/PySpark e Delta são fornecidos pelo Databricks. A variável PYTHONPATH aponta para as fontes versionadas; definir novamente ao abrir outro terminal. O comando `.\.venv\Scripts\python.exe -m novarota --version` funciona sem ativar scripts.
 
-Alternativa para rodar fontes sem instalar o pacote: definir `$env:PYTHONPATH = (Resolve-Path src).Path` e executar `python -m unittest discover -s tests -v`.
+O projeto usa requirements.txt e execução por `python -m novarota`; não exige instalação editável nem construção de wheel.
 
 Copiar `config/dev.example.json` para `config/dev.local.json`, ajustar o catálogo existente e os nomes autorizados. Configurações `.local.json` são ignoradas pelo Git. IDs SQL aceitam apenas letras, dígitos e underscore; paths do Volume são derivados desses IDs para impedir interpolação arbitrária em SQL.
 
@@ -35,4 +36,4 @@ Gerar nao publica arquivos na landing. Escolher diretorios separados para seeds,
 .\.venv\Scripts\python.exe scripts/build_artifacts.py
 ```
 
-O ZIP em `dist/novarota_bronze_demo.zip` contem notebook IPYNB, fontes do pacote e guias, sem dados de pessoas, credenciais, outputs ou PDF do briefing. O build e deterministico para as mesmas fontes. Para reconstruir o wheel: `python -m pip wheel --no-deps -w dist .`. Depois de mudar codigo local, reinstalar o pacote na venv ou usar PYTHONPATH=src durante desenvolvimento para evitar testar versao antiga instalada.
+O ZIP em `dist/novarota_bronze_demo.zip` contem notebook IPYNB, fontes do pacote e guias, sem dados de pessoas, credenciais, outputs ou PDF do briefing. O build e deterministico para as mesmas fontes. O Databricks importa os modulos ao lado do notebook, sem wheel. Usar PYTHONPATH=src durante o desenvolvimento local para executar a revisao atual das fontes.
