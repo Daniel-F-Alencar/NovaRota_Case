@@ -1,4 +1,4 @@
-"""Configuracao sem dependencia de Spark ou segredos de workspace."""
+"""Configuracao reutilizavel, sem dependencia de Spark ou segredos de workspace."""
 
 from dataclasses import dataclass, field, fields
 from datetime import date

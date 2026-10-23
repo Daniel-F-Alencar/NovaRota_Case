@@ -19,6 +19,34 @@ O ciclo é Explore → Propose → Review → Apply → Archive. A primeira muda
 - [Limitações da Free Edition](https://docs.databricks.com/aws/en/getting-started/free-edition-limitations)
 - [Streaming em serverless](https://docs.databricks.com/aws/en/compute/serverless/streaming)
 
+## Estrutura do repositório
+
+A estrutura sugerida pelo case é aplicada com um pacote Python `novarota` dentro de `src/`. O nome da pasta local continua `novarota-lakehouse-case`; `case-senior` é o nome de exemplo do briefing.
+
+```text
+novarota-lakehouse-case/
+├── README.md
+├── pyproject.toml
+├── src/novarota/
+│   ├── config/          # configuração validada
+│   ├── ingestion/       # publicação e Bronze incremental
+│   ├── silver/          # reservado; proposta CDC/SCD2
+│   ├── gold/            # reservado; produtos futuros
+│   ├── quality/         # reservado; regras Silver futuras
+│   ├── observability/   # auditoria e logs
+│   └── synthetic/       # geração das fontes fictícias
+├── config/              # exemplos de parâmetros de ambiente
+├── tests/
+├── sql/                 # reservado; consultas analíticas futuras
+├── notebooks/
+├── scripts/             # empacotamento para Databricks
+└── docs/
+    ├── data_contracts.md
+    └── evidence/
+```
+
+Os diretórios reservados contêm README explicando seu escopo. Configuração de código fica em `src/novarota/config/`; arquivos JSON de ambiente ficam em `config/`. Os imports públicos existentes, como `from novarota.config import PipelineConfig`, permanecem iguais.
+
 ## Executar
 
 No Databricks, importar o ZIP criado por `python scripts/build_artifacts.py`, abrir `novarota_case/01_bronze_demo` e executar em Serverless com `catalog=workspace`, `dataset_id=case01` e `profile=sample`. O pacote fica ao lado do notebook; regras permanecem em módulos Python. O [runbook](docs/bronze-runbook.md) detalha permissões, retomada e coleta de evidência.

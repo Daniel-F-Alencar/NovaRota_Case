@@ -53,6 +53,7 @@ class ArtifactTests(unittest.TestCase):
     def test_distribution_contains_package_and_executable_notebook_together(self):
         members = collect_members()
         self.assertIn("novarota_case/novarota/__init__.py", members)
+        self.assertIn("novarota_case/novarota/config/__init__.py", members)
         self.assertIn("novarota_case/novarota/ingestion/bronze.py", members)
         notebook = json.loads(members["novarota_case/01_bronze_demo.ipynb"])
         for cell in notebook["cells"]:
@@ -64,10 +65,17 @@ class ArtifactTests(unittest.TestCase):
     def test_actual_distribution_has_explicit_parent_folders(self):
         with TemporaryDirectory() as temp:
             archive = Path(temp) / "actual.zip"
-            directories = write_archive(archive, collect_members())
+            members = collect_members()
+            directories = write_archive(archive, members)
+            expected_directories = {
+                parent.as_posix()
+                for name in members
+                for parent in Path(name).parents
+                if parent.as_posix() != "."
+            }
             with ZipFile(archive) as bundle:
-                self.assertEqual(directories, 5)
-                self.assertEqual(len(bundle.infolist()), 25)
+                self.assertEqual(directories, len(expected_directories))
+                self.assertEqual(len(bundle.infolist()), len(members) + len(expected_directories))
                 seen = {"."}
                 for entry in bundle.infolist():
                     self.assertIn(Path(entry.filename).parent.as_posix(), seen)
