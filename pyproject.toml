@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "novarota-lakehouse-case"
+version = "0.1.0"
+description = "Case Lakehouse NovaRota com dados sinteticos"
+requires-python = ">=3.10"
+dependencies = []
+
+[project.scripts]
+novarota = "novarota.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]

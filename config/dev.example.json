@@ -1,0 +1,11 @@
+{
+  "environment": "dev",
+  "catalog": "workspace",
+  "bronze_schema": "novarota_bronze",
+  "ops_schema": "novarota_ops",
+  "volume": "case_files",
+  "reference_date": "2026-06-30",
+  "seed": 42,
+  "mode": "incremental",
+  "batch_id": "batch_001_initial"
+}
