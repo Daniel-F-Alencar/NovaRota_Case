@@ -37,5 +37,6 @@ Em outra máquina, seguir o [setup local](docs/local-development.md). O pacote n
 - [Fundação local](docs/evidence/local-foundation.md)
 - [Amostra Databricks aprovada](docs/evidence/workspace-smoke-passed.md)
 - [Validação local do gerador e empacotamento](docs/evidence/local-bronze-validation.md)
+- [Correção da estrutura de pastas do ZIP](docs/evidence/import-archive-fix.md)
 
 O objetivo é entregar os critérios completos do case progressivamente. Os artefatos da primeira mudança não demonstram, por si, conclusão das camadas seguintes.
