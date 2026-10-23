@@ -111,6 +111,7 @@ Usar explain e query profile disponível no serverless para discutir estratégia
 
 Documentar papéis de ingestão, transformação, consumo Gold e Data Science em Unity Catalog. Demonstrar apenas permissões que a conta permitir; administração corporativa, rede privada e operação com SLA ficam como desenho de produção.
 
+## Etapas de implementação
 
 1. `bootstrap-synthetic-bronze`: setup reproduzível, contratos sintéticos, lotes determinísticos, Auto Loader e Bronze com metadados. Concluída e arquivada em 2026-10-23.
 2. `build-silver-cdc-quality`: contratos tipados, quarentena, SCD2, MERGE, atrasos e reprocessamento. Próxima proposta, a partir da fundação demonstrada.

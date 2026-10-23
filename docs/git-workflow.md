@@ -1,5 +1,6 @@
 # Fluxo Git do case
 
+O histórico registra a evolução do projeto, com autoria, datas, mensagens e merges. Os arquivos internos de planejamento ficam fora da publicação. O histórico anterior à preparação da publicação permanece em backup local.
 
 ## Branches
 

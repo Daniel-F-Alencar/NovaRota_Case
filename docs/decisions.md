@@ -68,6 +68,7 @@ ADRs resumidas em 2026-10-23. Cada decisão indica seu estado e consequências. 
 
 **Contexto:** o avaliador observará o histórico; já existiam oito commits reais antes desta etapa.
 
+**Decisão:** preservar a sequência, autoria, datas e mensagens dos commits. Arquivos internos de planejamento ficam fora das versões publicadas, com backup local do histórico anterior à preparação da entrega. `main` recebe a entrega inicial Bronze e a organização; `develop` integra trabalho em andamento. Usar as três branches feature conforme o escopo, com merges que preservem a evolução.
 
 **Alternativas:** reiniciar Git; reescrever commits antigos para simular branches; usar apenas um commit com a entrega completa.
 

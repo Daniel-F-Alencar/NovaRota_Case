@@ -23,7 +23,7 @@ O desenvolvimento segue etapas de fundação/Bronze, Silver, Gold e demonstraç�
 
 ## Estrutura do repositório
 
-A estrutura sugerida pelo case é aplicada com um pacote Python `novarota` dentro de `src/`. O nome da pasta local continua `novarota-lakehouse-case`; `case-senior` é o nome de exemplo do briefing.
+O código está organizado por responsabilidade dentro do pacote Python `novarota`, em `src/`.
 
 ```text
 novarota-lakehouse-case/
