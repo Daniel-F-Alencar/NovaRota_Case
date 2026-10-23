@@ -128,6 +128,8 @@ def _metrics(evaluations, inputs, config):
 
 def run_silver(spark, config: PipelineConfig):
     """Uma tentativa concorrente por dataset. Retry deve reutilizar o mesmo run_id."""
+    if config.rule_version != "silver_v1":
+        raise ValueError("Esta implementacao suporta somente rule_version=silver_v1")
     setup_silver(spark, config)
     parameters = {**asdict(config), "implementation": IMPLEMENTATION_VERSION}
     signature = sha256(json.dumps(parameters, default=str, sort_keys=True).encode()).hexdigest()
@@ -153,6 +155,11 @@ def run_silver(spark, config: PipelineConfig):
         with audited(writer, "silver_pipeline") as audit_metrics:
             metadata = _snapshot(spark, config, root, signature)
             inputs = _read_inputs(spark, metadata, config)
+            binding_name = sha256(config.dataset_key.encode()).hexdigest() + "_binding.json"
+            _write_once_json(root.parent / binding_name, {
+                source: {"table": item["table"], "table_id": item["table_id"]}
+                for source, item in metadata["inputs"].items()
+            })
             ready = root / "ready.json"
             if not ready.exists():
                 def materialize(name, frame):
