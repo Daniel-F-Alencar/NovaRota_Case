@@ -9,10 +9,10 @@ O histórico registra a evolução do projeto, com autoria, datas, mensagens e m
 | main | Entrega inicial Bronze, organização e evidência registrada |
 | develop | Integração da organização e propostas em andamento |
 | feature/ingestion-framework | Organização modular da fundação/ingestão |
-| feature/dq-and-scd | Proposta e implementação futura de qualidade e histórico |
-| feature/gold-data-products | Reservada para o trabalho Gold |
+| feature/dq-and-scd | Silver implementada, com primeira execução demonstrada |
+| feature/gold-data-products | Gold e SQL implementados; execução remota pendente |
 
-Gold ainda não tem implementação. Uma branch existir não significa que sua capacidade esteja concluída. Destino da publicação privada: [Daniel-F-Alencar/NovaRota_Case](https://github.com/Daniel-F-Alencar/NovaRota_Case). As cinco branches fazem parte da publicação inicial.
+Gold está implementada na feature e aguarda demonstração real. Uma branch existir não significa que sua capacidade esteja validada. Destino da publicação privada: [Daniel-F-Alencar/NovaRota_Case](https://github.com/Daniel-F-Alencar/NovaRota_Case). As cinco branches fazem parte da publicação inicial.
 
 ## Inspecionar o estado
 
