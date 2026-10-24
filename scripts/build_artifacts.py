@@ -29,13 +29,15 @@ def notebook_from_source(path: Path) -> dict:
 
 def collect_members() -> dict[str, bytes]:
     members = {}
-    for name in ("01_bronze_demo", "02_silver_demo"):
+    for name in ("01_bronze_demo", "02_silver_demo", "03_gold_demo"):
         notebook = json.dumps(notebook_from_source(ROOT / f"notebooks/{name}.py"), ensure_ascii=False, indent=1).encode("utf-8")
         members[f"novarota_case/{name}.ipynb"] = notebook
     for file in sorted((ROOT / "src/novarota").rglob("*.py")):
         members["novarota_case/novarota/" + file.relative_to(ROOT / "src/novarota").as_posix()] = file.read_bytes()
-    for name in ("data_contracts.md", "bronze-runbook.md", "silver-contracts.md", "silver-runbook.md"):
+    for name in ("data_contracts.md", "bronze-runbook.md", "silver-contracts.md", "silver-runbook.md", "gold-contracts.md", "gold-runbook.md"):
         members["novarota_case/" + name] = (ROOT / "docs" / name).read_bytes()
+    for file in sorted((ROOT / "sql").glob("*.sql")):
+        members["novarota_case/sql/" + file.name] = file.read_bytes()
     return members
 
 
@@ -78,6 +80,7 @@ def main() -> None:
     directories = write_archive(archive, members)
     (output / "01_bronze_demo.ipynb").write_bytes(members["novarota_case/01_bronze_demo.ipynb"])
     (output / "02_silver_demo.ipynb").write_bytes(members["novarota_case/02_silver_demo.ipynb"])
+    (output / "03_gold_demo.ipynb").write_bytes(members["novarota_case/03_gold_demo.ipynb"])
     print(json.dumps({"zip": str(archive), "sha256": sha256(archive.read_bytes()).hexdigest(),
                       "files": len(members), "directories": directories, "entries": len(members) + directories}, indent=2))
 
