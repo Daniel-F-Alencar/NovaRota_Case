@@ -8,7 +8,7 @@ ADRs resumidas em 2026-10-23. Cada decisão indica seu estado e consequências. 
 
 **Contexto:** o briefing sugere src, config, ingestion, silver, gold, quality, observability, tests, sql, notebooks e documentação de arquitetura/decisões. O candidato escolheu requirements.txt para documentar dependências. O projeto já possui módulos importados pelos notebooks.
 
-**Decisão:** usar layout src com namespace `novarota` e módulos irmãos por responsabilidade. Configuração passa a pacote `novarota.config`, preservando o import público. Silver, Gold e qualidade têm diretórios reservados com README até a respectiva implementação. Arquivos de ambiente ficam na pasta config da raiz. A execução local usa PYTHONPATH=src e requirements.txt; Spark/Delta são fornecidos pelo Databricks.
+**Decisão:** usar layout src com namespace `novarota` e módulos irmãos por responsabilidade. Configuração passa a pacote `novarota.config`, preservando o import público. Silver e qualidade já têm implementação; Gold ainda tem diretório reservado. Arquivos de ambiente ficam na pasta config da raiz. A execução local usa PYTHONPATH=src e requirements.txt; Spark/Delta são fornecidos pelo Databricks.
 
 **Alternativas:** módulos genéricos diretamente em src; código de todas as camadas em notebooks; camadas de transformação dentro de ingestion.
 
@@ -40,11 +40,11 @@ ADRs resumidas em 2026-10-23. Cada decisão indica seu estado e consequências. 
 
 ## ADR-004 — Idempotência e auditabilidade
 
-**Estado:** adotada na Bronze; extensão Silver proposta.
+**Estado:** adotada na Bronze e implementada na Silver; primeira execução Silver concluída.
 
 **Contexto:** repetição de tentativa e duplicata de negócio são situações distintas.
 
-**Decisão:** publicar arquivos imutáveis com manifesto; checkpoint por fonte; reconciliar antes/depois; distinguir batch_id de run_id. Registrar falha e propagar erro. Silver deverá deduplicar identidades/versionar conteúdo e usar MERGE com origem única por chave.
+**Decisão:** publicar arquivos imutáveis com manifesto; checkpoint por fonte; reconciliar antes/depois; distinguir batch_id de run_id. Registrar falha e propagar erro. Silver deduplica identidades, versiona conteúdo e usa MERGE com origem única por chave.
 
 **Alternativas:** sobrescrever arquivos publicados; apagar checkpoints para reprocessar; usar hash como chave única Bronze.
 

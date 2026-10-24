@@ -1,6 +1,6 @@
 # Contratos e regras Silver
 
-Estado: código implementado; demonstração no Databricks pendente. A Bronze permanece lexical e preservada. As regras abaixo são executadas como expressões Spark, sem UDF Python ou coleta dos registros no driver.
+Estado: código implementado; [primeira execução no Databricks concluída](evidence/silver-demo-succeeded.md). A Bronze permanece lexical e preservada. As regras abaixo são executadas como expressões Spark, sem UDF Python ou coleta dos registros no driver. Cenários individuais e recuperação após falha ainda exigem evidência própria.
 
 ## Tipos
 
