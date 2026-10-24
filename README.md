@@ -2,9 +2,9 @@
 
 Case de Engenharia de Dados Sênior em Databricks Free Edition, com dados inteiramente sintéticos.
 
-Estado: fundação e Bronze concluídas. A demonstração registrou BRONZE_DEMO_PASSED em modo FRESH: 111 linhas nas seis fontes, com reconciliação, replay, atraso, evolução de schema e auditoria verificados pelo notebook. Os 34 testes locais passaram antes dessa execução. Prata, SCD2, Ouro e consultas analíticas pertencem às mudanças seguintes.
+Estado: fundação e Bronze concluídas. A demonstração registrou BRONZE_DEMO_PASSED em modo FRESH: 111 linhas nas seis fontes, com reconciliação, replay, atraso, evolução de schema e auditoria verificados pelo notebook. Os 34 testes locais passaram antes dessa execução. A primeira execução Silver também concluiu com sucesso; Gold e consultas analíticas pertencem às mudanças seguintes.
 
-Na branch `feature/dq-and-scd`, a Silver está implementada e aguardando execução no Databricks: tipagem, qualidade, quarentena, canonização, SCD2, MERGE e retomada. Gold permanece futura. Os 34 testes citados acima pertencem à revisão Bronze; nenhuma nova execução de testes ou Spark foi realizada nesta etapa Silver.
+Na branch `feature/dq-and-scd`, a Silver inclui tipagem, qualidade, quarentena, canonização, SCD2, MERGE e controle de retomada. A execução informada no Databricks reconciliou 111 entradas: 102 aprovadas, 2 duplicatas e 7 em quarentena. Cenários individuais e recuperação após falha ainda exigem evidência específica. Os 34 testes locais citados acima pertencem à revisão Bronze.
 
 - [Acesso ao workspace e primeira amostra](docs/workspace-setup.md)
 - [Desenvolvimento local](docs/local-development.md)
@@ -83,5 +83,6 @@ Em outra máquina, seguir o [setup local](docs/local-development.md). O pacote n
 - [Validação local do gerador e empacotamento](docs/evidence/local-bronze-validation.md)
 - [Correção da estrutura de pastas do ZIP](docs/evidence/import-archive-fix.md)
 - [Bronze das seis fontes aprovada — resumo da execução](docs/evidence/bronze-demo-passed.md)
+- [Silver concluída — resumo da primeira execução](docs/evidence/silver-demo-succeeded.md)
 
 O objetivo é entregar os critérios completos do case progressivamente. Os artefatos da primeira mudança não demonstram, por si, conclusão das camadas seguintes.

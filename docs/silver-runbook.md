@@ -1,6 +1,6 @@
 # Executar a Silver
 
-Pré-requisito: seis tabelas Bronze disponíveis. A configuração inicial reutiliza a demonstração Bronze de `case01`, com 111 linhas. O código Silver está implementado; a execução real, seus resultados e a retomada ainda precisam de evidência no Databricks.
+Pré-requisito: seis tabelas Bronze disponíveis. A configuração inicial reutiliza a demonstração Bronze de `case01`, com 111 linhas. A [primeira execução Silver](evidence/silver-demo-succeeded.md) concluiu com sucesso e reconciliou todas as fontes. A retomada após falha e os cenários individuais ainda precisam de evidência específica no Databricks.
 
 ## Importação e primeira execução
 
@@ -34,7 +34,7 @@ A versão de regras disponível é silver_v1. O staging guarda também um víncu
 - T_SCHEMA preserva dispositivo=mobile-sintetico.
 - R_PARTIAL e R_FULL mantêm 30 e 80 BRL validados, respectivamente. O cálculo líquido pertence à Gold.
 
-Esses são critérios esperados, ainda sem resultados Silver registrados.
+Esses critérios exigem consulta às linhas correspondentes. O resumo da primeira execução registra as contagens e o sucesso operacional, sem exibir os valores individuais.
 
 ## Replay, atraso e reprocessamento
 

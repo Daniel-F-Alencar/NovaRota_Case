@@ -48,11 +48,11 @@ ADRs resumidas em 2026-10-23. Cada decisão indica seu estado e consequências. 
 
 **Alternativas:** sobrescrever arquivos publicados; apagar checkpoints para reprocessar; usar hash como chave única Bronze.
 
-**Consequências:** replay operacional não acrescenta arquivos já reconciliados, mas duplicatas recebidas em arquivos novos continuam na Bronze. Dados e auditoria não formam commit único; recuperação exige reconciliação. A extensão Silver ainda precisa de implementação e evidência próprias.
+**Consequências:** replay operacional não acrescenta arquivos já reconciliados, mas duplicatas recebidas em arquivos novos continuam na Bronze. Dados e auditoria não formam commit único; recuperação exige reconciliação. A Silver tem implementação e uma primeira execução documentada; recuperação após falha ainda exige evidência própria.
 
 ## ADR-005 — Histórico corrigível por eventos atrasados
 
-**Estado:** implementada na Silver; demonstração remota pendente.
+**Estado:** implementada na Silver; primeira execução concluída, cenário temporal individual ainda sem evidência exportada.
 
 **Contexto:** C001-v2 chega após v3; cancelamento e deleção não podem alterar retroativamente o estado em compras anteriores à sua vigência.
 

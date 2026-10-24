@@ -16,4 +16,4 @@ Artefato local: dist/novarota_silver_demo.zip. SHA-256: `a56b92d3ff646a2cdaf15e5
 
 Nenhuma nova suíte de testes foi adicionada ou executada e nenhum código Spark/Silver foi executado nesta etapa. Os 34 testes aprovados e o BRONZE_DEMO_PASSED documentados anteriormente pertencem à etapa Bronze. Análise de sintaxe e build não comprovam transformações Spark, expressões, persistência Delta, recuperação ou os cenários de negócio.
 
-A demonstração Silver real e os critérios de conflitos, chegada posterior do pai, replay, reprocessamento e falha parcial permanecem pendentes. O notebook 02_silver_demo e docs/silver-runbook.md descrevem a execução. Gold permanece futura.
+A primeira demonstração Silver real foi concluída posteriormente; seus resultados informados pelo usuário estão em [silver-demo-succeeded.md](silver-demo-succeeded.md). Esta seção registra somente o estado anterior à execução. Os critérios específicos de conflitos, chegada posterior do pai, replay, reprocessamento e falha parcial permanecem pendentes. Gold permanece futura.

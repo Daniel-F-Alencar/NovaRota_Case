@@ -1,6 +1,6 @@
 # Arquitetura NovaRota
 
-Estado em 2026-10-23: geração sintética, publicação, Bronze e auditoria implementadas, com BRONZE_DEMO_PASSED em modo FRESH e 111 linhas nas seis fontes. Na branch feature/dq-and-scd, Silver e qualidade estão implementadas, aguardando demonstração real. Gold e SQL analítico são etapas futuras.
+Estado em 2026-10-23: geração sintética, publicação, Bronze e auditoria implementadas, com BRONZE_DEMO_PASSED em modo FRESH e 111 linhas nas seis fontes. Na branch feature/dq-and-scd, Silver e qualidade concluíram a primeira execução informada, reconciliando 111 entradas. A verificação dos cenários individuais e da retomada segue aberta. Gold e SQL analítico são etapas futuras.
 
 ## Fluxo de dados
 
@@ -11,14 +11,14 @@ flowchart LR
     V --> A[Auto Loader AvailableNow por fonte]
     A --> B[Bronze Delta lexical e metadados]
     A --> O[Auditoria de execução]
-    B -. proposta .-> Q[Tipagem e qualidade]
-    Q -. proposta .-> X[Quarentena e avaliações]
-    Q -. proposta .-> S[Silver canônica e SCD2]
+    B --> Q[Tipagem e qualidade]
+    Q --> X[Quarentena e avaliações]
+    Q --> S[Silver canônica e SCD2]
     S -. futuro .-> F[Gold: fato e indicadores]
     F -. futuro .-> D[Features por data de corte e SQL]
 ```
 
-Linhas contínuas representam o caminho Bronze demonstrado. As etapas de qualidade e Silver estão implementadas, ainda sem demonstração remota; Gold permanece futura.
+Linhas contínuas representam o caminho Bronze e a primeira execução Silver informada. Gold permanece futura.
 
 ## Organização do código
 
@@ -30,8 +30,8 @@ O layout sugerido no briefing é mantido dentro de `src/novarota/`, um namespace
 | src/novarota/synthetic/ | Contratos materializados e massa determinística | Implementado |
 | src/novarota/ingestion/ | Manifestos, publicação, Auto Loader, hash e reconciliação | Implementado |
 | src/novarota/observability/ | Auditoria e logs por tentativa | Implementado |
-| src/novarota/quality/ | Regras reutilizáveis e contratos tipados | Implementado; demonstração pendente |
-| src/novarota/silver/ | Canonização, SCD2, MERGE e controle de tentativas | Implementado; demonstração pendente |
+| src/novarota/quality/ | Regras reutilizáveis e contratos tipados | Implementado; primeira execução concluída |
+| src/novarota/silver/ | Canonização, SCD2, MERGE e controle de tentativas | Implementado; primeira execução concluída |
 | src/novarota/gold/ | Produtos de consumo e features | Futuro |
 | config/ | JSON de exemplo por ambiente, sem credenciais | Implementado |
 | tests/ | Verificações locais e fixtures independentes | 34 testes na última execução anterior à reorganização |
@@ -40,7 +40,7 @@ O layout sugerido no briefing é mantido dentro de `src/novarota/`, um namespace
 | scripts/ | Build determinístico do pacote para importação | Implementado |
 | docs/ | Arquitetura, decisões, contratos, guias e evidências | Mantido com cada mudança |
 
-Os diretórios futuros têm README de escopo. A verificação de integridade de arquivos permanece em ingestion; as regras de qualidade de negócio serão adicionadas ao módulo quality na mudança correspondente.
+Os diretórios futuros têm README de escopo. A verificação de integridade de arquivos permanece em ingestion; as regras de qualidade de negócio estão no módulo quality.
 
 ## Recursos da execução demonstrada
 
