@@ -1,5 +1,5 @@
 # Quality
 
-Diretório reservado para validações de negócio reutilizáveis e classificação de qualidade/quarentena da Silver. Não há regra Silver implementada neste diretório.
+Contratos tipados e validações de negócio reutilizáveis da Silver, implementados em `contracts.py` e `rules.py`. CPF, campos obrigatórios, enums, datas UTC, decimais e proveniência são avaliados com expressões Spark, sem UDF Python.
 
-As verificações já existentes em `novarota.ingestion` tratam manifestos, integridade de arquivos e fidelidade Bronze. As novas regras de CPF, tipagem financeira e referência temporal serão implementadas conforme a proposta `build-silver-cdc-quality`.
+As verificações em `novarota.ingestion` tratam integridade de arquivos e fidelidade Bronze. Regras de referência temporal e canonização ficam em `novarota.silver`. Consultar `docs/silver-contracts.md` na raiz para códigos, tipos e identidades. A demonstração real da Silver ainda está pendente.

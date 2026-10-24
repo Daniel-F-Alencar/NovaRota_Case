@@ -2,6 +2,8 @@
   "environment": "dev",
   "catalog": "workspace",
   "bronze_schema": "novarota_bronze",
+  "silver_schema": "novarota_silver",
+  "rule_version": "silver_v1",
   "ops_schema": "novarota_ops",
   "volume": "case_files",
   "reference_date": "2026-06-30",
