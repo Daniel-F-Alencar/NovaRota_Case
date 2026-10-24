@@ -20,19 +20,21 @@ def notebook_from_source(path: Path) -> dict:
         if block.startswith("# MAGIC %md"):
             lines = block.splitlines()[1:]
             source = "\n".join(line.removeprefix("# MAGIC ").removeprefix("# MAGIC") for line in lines) + "\n"
-            cells.append({"cell_type": "markdown", "id": f"novarota-bronze-{index}", "metadata": {}, "source": source.splitlines(keepends=True)})
+            cells.append({"cell_type": "markdown", "id": f"{path.stem}-{index}", "metadata": {}, "source": source.splitlines(keepends=True)})
         else:
             ast.parse(block)
-            cells.append({"cell_type": "code", "id": f"novarota-bronze-{index}", "metadata": {}, "source": block.splitlines(keepends=True), "outputs": [], "execution_count": None})
+            cells.append({"cell_type": "code", "id": f"{path.stem}-{index}", "metadata": {}, "source": block.splitlines(keepends=True), "outputs": [], "execution_count": None})
     return {"cells": cells, "metadata": {"kernelspec": {"display_name": "Python 3", "language": "python", "name": "python3"}, "language_info": {"name": "python"}}, "nbformat": 4, "nbformat_minor": 5}
 
 
 def collect_members() -> dict[str, bytes]:
-    notebook = json.dumps(notebook_from_source(ROOT / "notebooks/01_bronze_demo.py"), ensure_ascii=False, indent=1).encode("utf-8")
-    members = {"novarota_case/01_bronze_demo.ipynb": notebook}
+    members = {}
+    for name in ("01_bronze_demo", "02_silver_demo"):
+        notebook = json.dumps(notebook_from_source(ROOT / f"notebooks/{name}.py"), ensure_ascii=False, indent=1).encode("utf-8")
+        members[f"novarota_case/{name}.ipynb"] = notebook
     for file in sorted((ROOT / "src/novarota").rglob("*.py")):
         members["novarota_case/novarota/" + file.relative_to(ROOT / "src/novarota").as_posix()] = file.read_bytes()
-    for name in ("data_contracts.md", "bronze-runbook.md"):
+    for name in ("data_contracts.md", "bronze-runbook.md", "silver-contracts.md", "silver-runbook.md"):
         members["novarota_case/" + name] = (ROOT / "docs" / name).read_bytes()
     return members
 
@@ -75,6 +77,7 @@ def main() -> None:
     members = collect_members()
     directories = write_archive(archive, members)
     (output / "01_bronze_demo.ipynb").write_bytes(members["novarota_case/01_bronze_demo.ipynb"])
+    (output / "02_silver_demo.ipynb").write_bytes(members["novarota_case/02_silver_demo.ipynb"])
     print(json.dumps({"zip": str(archive), "sha256": sha256(archive.read_bytes()).hexdigest(),
                       "files": len(members), "directories": directories, "entries": len(members) + directories}, indent=2))
 

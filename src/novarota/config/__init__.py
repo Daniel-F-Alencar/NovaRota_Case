@@ -34,10 +34,15 @@ class PipelineConfig:
     run_id: str = field(default_factory=lambda: uuid4().hex)
     date_from: date | None = None
     date_to: date | None = None
+    silver_schema: str = "novarota_silver"
+    rule_version: str = "silver_v1"
 
     def __post_init__(self) -> None:
-        for name in ("catalog", "bronze_schema", "ops_schema", "volume"):
+        for name in ("catalog", "bronze_schema", "ops_schema", "volume", "silver_schema"):
             identifier(getattr(self, name))
+        logical_id(self.rule_version)
+        if self.silver_schema in {self.bronze_schema, self.ops_schema}:
+            raise ValueError("silver_schema deve ser separado de bronze_schema e ops_schema")
         if self.environment not in {"dev", "test", "prod"}:
             raise ValueError("environment deve ser dev, test ou prod")
         if self.mode not in {"incremental", "reprocess"}:
@@ -64,6 +69,13 @@ class PipelineConfig:
 
     def table(self, source: str) -> str:
         return f"{self.catalog}.{self.bronze_schema}.bronze_{identifier(source)}"
+
+    @property
+    def dataset_key(self) -> str:
+        return f"{self.catalog}.{self.bronze_schema}.{self.silver_schema}"
+
+    def silver_table(self, name: str) -> str:
+        return f"{self.catalog}.{self.silver_schema}.{identifier(name)}"
 
     @classmethod
     def from_dict(cls, values: dict) -> "PipelineConfig":
