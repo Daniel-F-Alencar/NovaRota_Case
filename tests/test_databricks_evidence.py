@@ -167,11 +167,18 @@ class DatabricksEvidenceTests(unittest.TestCase):
 
     def test_saved_anomaly_query_run_and_csv_are_consistent(self):
         profile_path = EVIDENCE / "query-profile_01f1d084-b11e-1d8c-aaee-496e19470eb7.json"
-        profile = json.loads(profile_path.read_text(encoding="utf-8"))["query"]
+        profile_document = json.loads(profile_path.read_text(encoding="utf-8"))
+        profile = profile_document["query"]
         self.assertEqual(profile["status"], "FINISHED")
         self.assertEqual(profile["id"], "01f1d084-b11e-1d8c-aaee-496e19470eb7")
         self.assertEqual(profile["metrics"]["rowsProducedCount"], 28)
         self.assertEqual(profile["metrics"]["rowsReadCount"], 118)
+        self.assertEqual(len(profile_document["graphs"]), 1)
+        graph = profile_document["graphs"][0]
+        plan_nodes = {node.get("tag") for node in graph["nodes"]}
+        self.assertIn("PHOTON_BROADCAST_HASH_JOIN_EXEC", plan_nodes)
+        self.assertIn("UNKNOWN.PhotonWindow", plan_nodes)
+        self.assertIn("PHOTON_PARQUET_FILE_SCAN_EXEC", plan_nodes)
         with (EVIDENCE / "01_anomalias_cliente_sql.csv").open(
             encoding="utf-8-sig", newline=""
         ) as stream:
