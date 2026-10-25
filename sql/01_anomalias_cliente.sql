@@ -16,15 +16,16 @@ mensal AS (
     FROM compras
     GROUP BY id_cliente, data_mes, cidade, segmento
 ),
+-- Um registro por cliente, mês e grupo; o baseline próprio acompanha períodos observados no mesmo grupo.
 historico AS (
     SELECT m.*,
-           ROW_NUMBER() OVER (PARTITION BY id_cliente ORDER BY data_mes DESC, cidade, segmento) AS ordem_recente,
-           LAG(gasto_liquido_brl) OVER (PARTITION BY id_cliente ORDER BY data_mes, cidade, segmento) AS gasto_anterior_brl,
-           AVG(gasto_liquido_brl) OVER (PARTITION BY id_cliente ORDER BY data_mes, cidade, segmento
+           ROW_NUMBER() OVER (PARTITION BY id_cliente, cidade, segmento ORDER BY data_mes DESC) AS ordem_recente,
+           LAG(gasto_liquido_brl) OVER (PARTITION BY id_cliente, cidade, segmento ORDER BY data_mes) AS gasto_anterior_brl,
+           AVG(gasto_liquido_brl) OVER (PARTITION BY id_cliente, cidade, segmento ORDER BY data_mes
                 ROWS BETWEEN 3 PRECEDING AND 1 PRECEDING) AS baseline_proprio_brl,
-           COUNT(*) OVER (PARTITION BY id_cliente ORDER BY data_mes, cidade, segmento
+           COUNT(*) OVER (PARTITION BY id_cliente, cidade, segmento ORDER BY data_mes
                 ROWS BETWEEN 3 PRECEDING AND 1 PRECEDING) AS periodos_baseline,
-           FIRST_VALUE(data_mes) OVER (PARTITION BY id_cliente ORDER BY data_mes, cidade, segmento
+           FIRST_VALUE(data_mes) OVER (PARTITION BY id_cliente, cidade, segmento ORDER BY data_mes
                 ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING) AS primeiro_mes_observado
     FROM mensal m
 ),
@@ -37,7 +38,8 @@ pares AS (
 ),
 comparado AS (
     SELECT h.*, p.qt_clientes_pares, p.media_pares_brl,
-           NTILE(4) OVER (PARTITION BY h.data_mes ORDER BY h.gasto_liquido_brl DESC, h.id_cliente) AS quartil_gasto
+           NTILE(4) OVER (PARTITION BY h.data_mes, h.cidade, h.segmento
+                          ORDER BY h.gasto_liquido_brl DESC, h.id_cliente) AS quartil_gasto
     FROM historico h
     JOIN pares p ON h.data_mes = p.data_mes AND h.cidade = p.cidade AND h.segmento = p.segmento
 )
