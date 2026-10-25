@@ -1,6 +1,6 @@
 # Arquitetura NovaRota
 
-Estado em 2026-10-23: geração sintética, publicação, Bronze e auditoria implementadas, com BRONZE_DEMO_PASSED em modo FRESH e 111 linhas nas seis fontes. Na branch feature/dq-and-scd, Silver e qualidade concluíram a primeira execução informada, reconciliando 111 entradas. A verificação dos cenários individuais e da retomada segue aberta. Gold e SQL analítico são etapas futuras.
+Estado em 2026-10-25: Bronze demonstrada com 111 linhas; a primeira Silver reconciliou 111 entradas; a primeira Gold informou sucesso e reconciliou oito produtos. Os resumos Bronze, Silver e Gold são transcrições fornecidas pelo candidato. Cenários Silver/Gold, retomada após falha e execução da consulta SQL ainda precisam de evidências preservadas.
 
 ## Fluxo de dados
 
@@ -14,11 +14,11 @@ flowchart LR
     B --> Q[Tipagem e qualidade]
     Q --> X[Quarentena e avaliações]
     Q --> S[Silver canônica e SCD2]
-    S -. futuro .-> F[Gold: fato e indicadores]
-    F -. futuro .-> D[Features por data de corte e SQL]
+    S --> F[Gold: fato e indicadores]
+    F --> D[Features por data de corte e SQL]
 ```
 
-Linhas contínuas representam o caminho Bronze e a primeira execução Silver informada. Gold permanece futura.
+As linhas representam o caminho executado até a Gold informada. A consulta SQL analítica está implementada, mas sua execução remota não foi registrada.
 
 ## Organização do código
 
@@ -32,15 +32,15 @@ O layout sugerido no briefing é mantido dentro de `src/novarota/`, um namespace
 | src/novarota/observability/ | Auditoria e logs por tentativa | Implementado |
 | src/novarota/quality/ | Regras reutilizáveis e contratos tipados | Implementado; primeira execução concluída |
 | src/novarota/silver/ | Canonização, SCD2, MERGE e controle de tentativas | Implementado; primeira execução concluída |
-| src/novarota/gold/ | Produtos de consumo e features | Futuro |
+| src/novarota/gold/ | Produtos de consumo, features e controle de execução | Implementado; primeira execução remota informada |
 | config/ | JSON de exemplo por ambiente, sem credenciais | Implementado |
-| tests/ | Verificações locais e fixtures independentes | 34 testes na última execução anterior à reorganização |
-| sql/ | Consultas analíticas versionadas | Futuro |
-| notebooks/ | Entradas de execução e demonstração | Smoke, Bronze e Silver implementados |
+| tests/ | Verificações locais e fixtures independentes | 34 testes passaram em 2026-10-25; sem cobertura direta das transformações Spark Silver/Gold |
+| sql/ | Consultas analíticas versionadas | Implementado; execução remota pendente |
+| notebooks/ | Entradas de execução e demonstração | Smoke, Bronze, Silver e Gold implementados; primeira Gold executada |
 | scripts/ | Build determinístico do pacote para importação | Implementado |
 | docs/ | Arquitetura, decisões, contratos, guias e evidências | Mantido com cada mudança |
 
-Os diretórios futuros têm README de escopo. A verificação de integridade de arquivos permanece em ingestion; as regras de qualidade de negócio estão no módulo quality.
+A verificação de integridade de arquivos permanece em ingestion; as regras de qualidade de negócio estão no módulo quality.
 
 ## Recursos da execução demonstrada
 
@@ -61,12 +61,14 @@ Dados e auditoria não são uma transação única. Uma tentativa é identificad
 
 ## Evolução Silver
 
-A Silver implementa tipagem, quarentena, reavaliação de referências, ledger CDC, SCD2 e canonização financeira. Os intervalos de vigência são semiabertos, com sequência da origem para desempate, conflitos explícitos e lacunas quando um evento é rejeitado. O processamento relê um snapshot completo das seis fontes, fixado por versões Delta, e persiste staging Parquet por tentativa. Os destinos gerenciados são sincronizados por MERGE escopado pelo dataset e reconciliados antes da conclusão. Ver [contratos](silver-contracts.md), [runbook](silver-runbook.md) e ADR-005. O comportamento real ainda precisa ser demonstrado no Databricks.
+A Silver implementa tipagem, quarentena, reavaliação de referências, ledger CDC, SCD2 e canonização financeira. Os intervalos de vigência são semiabertos, com sequência da origem para desempate, conflitos explícitos e lacunas quando um evento é rejeitado. O processamento relê um snapshot completo das seis fontes, fixado por versões Delta, e persiste staging Parquet por tentativa. Os destinos gerenciados são sincronizados por MERGE escopado pelo dataset e reconciliados antes da conclusão. A primeira execução reconciliou 111 entradas; cenários individuais e retomada ainda exigem evidência própria. Ver [contratos](silver-contracts.md), [runbook](silver-runbook.md), [primeira execução](evidence/silver-demo-succeeded.md) e ADR-005.
 
-Gold calculará o produto financeiro e as features depois da Silver. A SCD2 de vigência não basta, sozinha, para reconstruir o conhecimento disponível no corte de um modelo; essa semântica será especificada na mudança Gold.
+Gold calcula fato, dimensões, comportamento, risco e features sobre versões Delta fixadas da Silver concluída, com MERGE e estado de execução próprio. A execução informada produziu 50 linhas na fato, 27 em cliente-mês, 27 em indicadores de risco e 10 features, entre as oito tabelas reconciliadas. O corte usado foi 2026-10-24. O corte de features só aceita datas a partir da conclusão do snapshot Silver consumido; a Gold não oferece reconstrução de cortes anteriores para treino retrospectivo. Ver [resumo da execução](evidence/gold-demo-succeeded.md), [contratos](gold-contracts.md) e [runbook](gold-runbook.md).
 
 ## Evidência e limites
 
-[Resumo Bronze](evidence/bronze-demo-passed.md): transcrição fornecida pelo candidato. A amostra anterior foi conferida no navegador. Export do notebook com outputs ainda complementará a entrega final. O perfil sample demonstra correção funcional; não mede escala de produção.
+[Resumo Bronze](evidence/bronze-demo-passed.md): transcrição fornecida pelo candidato. Export do notebook com outputs ainda complementará a entrega final. O perfil sample demonstra correção funcional; não mede escala de produção.
 
-A reorganização moveu config.py para config/__init__.py com imports públicos preservados e ajustou as expectativas do teste de empacotamento. A suíte não foi reexecutada nessa etapa; os 34 testes aprovados são evidência anterior à reorganização.
+[Resumo Silver](evidence/silver-demo-succeeded.md): JSON final fornecido pelo usuário. Três CSVs de cenários foram examinados localmente e permaneceram fora do Git por solicitação do usuário. A transcrição Gold está em [resumo próprio](evidence/gold-demo-succeeded.md); os exports executados dos notebooks e o output da consulta SQL ainda faltam.
+
+A reorganização moveu config.py para config/__init__.py com imports públicos preservados e ajustou as expectativas do teste de empacotamento. A suíte atual foi executada em 2026-10-25 e passou nos 34 casos; ela cobre componentes locais, sem executar diretamente as transformações Spark Silver/Gold. Ver [evidência da suíte](evidence/local-test-suite-passed.md).

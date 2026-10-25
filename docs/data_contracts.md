@@ -47,7 +47,7 @@ Publicar copia apenas o lote selecionado para landing e finaliza com um manifest
 | batch_003_late | C001-v2 chega depois de v3; duplicata C001-v1 e T_DUP; CPF invalido; conta/cartao/transacao/evento/estorno com referencia invalida; T_LATE anterior a compras iniciais. |
 | batch_004_schema | T_SCHEMA com dispositivo=mobile-sintetico, schema_version=2; demais fontes com arquivos vazios. |
 
-Fixture de expectativas independente em `tests/fixtures/scenario_expectations.json`. Valores liquidos 70/0 para estorno parcial/total sao expectativas de negocio para a futura Prata/Ouro; a Bronze preserva os registros e nao aplica essas regras. Gera-se volume adicional sem mudar os cenarios. `sample`: 10 clientes validos iniciais e 40 transacoes de fundo; `demo`: 100 clientes iniciais e 10000 transacoes de fundo. Fixtures, atualizacoes e registros invalidos somam linhas adicionais.
+Fixture de expectativas independente em `tests/fixtures/scenario_expectations.json`. Valores líquidos 70/0 para estorno parcial/total são expectativas de negócio para Silver/Gold; a Bronze preserva os registros e não aplica essas regras. A execução Gold foi informada como concluída, mas a confirmação desses valores depende de preservar o output das células de cenário. Gera-se volume adicional sem mudar os cenários. `sample`: 10 clientes válidos iniciais e 40 transações de fundo; `demo`: 100 clientes iniciais e 10000 transações de fundo. Fixtures, atualizações e registros inválidos somam linhas adicionais.
 
 ## Hash de linha
 

@@ -8,7 +8,7 @@ ADRs resumidas em 2026-10-23. Cada decisão indica seu estado e consequências. 
 
 **Contexto:** o briefing sugere src, config, ingestion, silver, gold, quality, observability, tests, sql, notebooks e documentação de arquitetura/decisões. O candidato escolheu requirements.txt para documentar dependências. O projeto já possui módulos importados pelos notebooks.
 
-**Decisão:** usar layout src com namespace `novarota` e módulos irmãos por responsabilidade. Configuração passa a pacote `novarota.config`, preservando o import público. Silver e qualidade já têm implementação; Gold ainda tem diretório reservado. Arquivos de ambiente ficam na pasta config da raiz. A execução local usa PYTHONPATH=src e requirements.txt; Spark/Delta são fornecidos pelo Databricks.
+**Decisão:** usar layout src com namespace `novarota` e módulos irmãos por responsabilidade. Configuração passa a pacote `novarota.config`, preservando o import público. Silver, qualidade e Gold têm implementação modular. Arquivos de ambiente ficam na pasta config da raiz. A execução local usa PYTHONPATH=src e requirements.txt; Spark/Delta são fornecidos pelo Databricks.
 
 **Alternativas:** módulos genéricos diretamente em src; código de todas as camadas em notebooks; camadas de transformação dentro de ingestion.
 
@@ -60,7 +60,7 @@ ADRs resumidas em 2026-10-23. Cada decisão indica seu estado e consequências. 
 
 **Alternativas:** dimensão somente atual; aplicar SCD2 na ordem de chegada; descartar atraso por watermark de tempo do evento.
 
-**Consequências:** permite corrigir intervalos e relações temporais; aumenta o custo de reavaliar dependentes. Na amostra, varredura completa favorece clareza e correção. A reconstrução de features sem dados futuros ficará na mudança Gold.
+**Consequências:** permite corrigir intervalos e relações temporais; aumenta o custo de reavaliar dependentes. Na amostra, varredura completa favorece clareza e correção. A Gold usa somente um snapshot atual com corte não anterior à sua disponibilidade; múltiplos cortes históricos continuam fora do escopo.
 
 ## ADR-006 — Histórico Git e branches por mudança
 

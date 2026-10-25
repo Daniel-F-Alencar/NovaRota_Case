@@ -1,6 +1,6 @@
 # Exploração da solução NovaRota
 
-Data: 2026-10-23. Estado: visão do case completo; fundação e Bronze concluídas, com resumo de execução registrado. Na feature/dq-and-scd, Silver implementada e com primeira execução concluída; Gold permanece futura. As decisões abaixo distinguem esses estados.
+Data: 2026-10-25. Estado: fundação, Bronze, Silver e implementação Gold concluídas; as execuções Bronze, Silver e Gold foram informadas pelo candidato e têm resumos versionados. SQL analítico ainda não executado com evidência, cenários individuais e retomada Silver ainda sem exports, e branch Gold ainda não integrada em develop/main. As decisões abaixo distinguem implementação, execução informada e validação que falta.
 
 ## Problema e resultado esperado
 
@@ -39,7 +39,7 @@ Fluxo finito por execução: processar arquivos disponíveis, encerrar a Bronze,
 - Schemas propostos: `novarota_bronze`, `novarota_silver`, `novarota_gold` e `novarota_ops`.
 - Volume gerenciado em `novarota_ops`, com subdiretórios separados para landing, checkpoints, schemas e manifestos. Dados de tabela ficam em tabelas Delta gerenciadas.
 - Auto Loader em directory listing e `AvailableNow`; um checkpoint e um diretório de schema por fonte. Arquivos publicados são imutáveis.
-- Executar fontes sequencialmente no perfil pequeno. Um Job com dependências explícitas e uma execução concorrente evita pressão desnecessária sobre a cota.
+- Executar fontes sequencialmente no perfil pequeno. Um Databricks Workflow deve encadear Bronze → Silver → Gold por dependência, passar catalog/dataset/profile/data de corte como parâmetros e permitir no máximo uma execução concorrente por dataset. A conta do case não tem um Job versionado/provisionado; esse agendamento permanece desenho operacional.
 - Não depender de bucket cloud externo, DBFS mounts, RDDs ou configuração de cluster clássico.
 - Setup, gerador, carga de lotes e pipeline devem funcionar dentro do workspace usando recursos disponíveis. Execução local auxilia testes; evidência local não substitui execução Databricks.
 
@@ -105,7 +105,7 @@ Quarentena preserva payload, origem, etapa, códigos de regras e identificação
 
 ## Operação, performance e governança
 
-Começar sem particionamento físico nas tabelas pequenas; as pastas da fonte não impõem particionamento Delta. Documentar critério de volume/cardinalidade para particionamento ou clustering futuros e avaliar `OPTIMIZE` conforme suporte e tamanho. Não acrescentar ZORDER ou Liquid Clustering como demonstração sem justificar e verificar disponibilidade.
+Começar sem particionamento físico nas tabelas pequenas; as pastas da fonte não impõem particionamento Delta. Na amostra, evitar uma escrita por evento e agrupar a saída por lote/fonte para não criar arquivos minúsculos. Em produção, acompanhar quantidade e tamanho de arquivos e compactar conforme o volume e a capacidade suportada; definir particionamento ou clustering somente após observar cardinalidade e filtros. Avaliar `OPTIMIZE` conforme suporte e tamanho. Não acrescentar ZORDER ou Liquid Clustering como demonstração sem justificar e verificar disponibilidade.
 
 Usar explain e query profile disponível no serverless para discutir estratégia de joins, filtros e eventual broadcast de dimensões pequenas; não alegar ganho de escala a partir da amostra do case. Observar linhas de entrada, aprovadas, rejeitadas, duplicatas, duração e falhas por etapa em tabelas de auditoria, com logs estruturados do aplicativo.
 
@@ -115,8 +115,8 @@ Documentar papéis de ingestão, transformação, consumo Gold e Data Science em
 
 1. `bootstrap-synthetic-bronze`: setup reproduzível, contratos sintéticos, lotes determinísticos, Auto Loader e Bronze com metadados. Concluída e arquivada em 2026-10-23.
 2. Silver: contratos tipados, quarentena, SCD2, MERGE, atrasos e reprocessamento implementados na feature/dq-and-scd. A primeira execução real reconciliou 111 entradas; critérios adversos ainda exigem evidência específica.
-3. `publish-gold-risk-products`: fato, dimensões, agregações, features com corte temporal e SQL avançado.
-4. `demonstrate-integrated-case`: demonstração integrada, reconciliação de cenários e evidências finais. Testes unitários, de transformação e documentação já acompanham as mudanças anteriores.
+3. Gold: fato, dimensões, agregações, features com corte temporal e SQL avançado implementados na feature/gold-data-products. A primeira execução Gold foi informada como concluída; faltam a evidência dos valores por cenário e a execução da consulta SQL.
+4. `demonstrate-integrated-case`: reunir exports com outputs Bronze/Silver/Gold, validar cenários temporais e financeiros, executar SQL, acrescentar cobertura direta das transformações Spark Silver/Gold e integrar a branch Gold em develop/main. A suíte local passou com 34 testes em 2026-10-25; os testes atuais não exercitam diretamente essas transformações.
 
 Git deverá registrar evolução real com conventional commits. Não fabricar commits retroativos. A entrega poderá ser repositório privado ou pacote preservando o histórico Git, conforme combinado com o avaliador.
 
@@ -129,4 +129,4 @@ Git deverá registrar evolução real com conventional commits. Não fabricar co
 
 ## Próxima validação
 
-Consultar e registrar os cenários específicos de atraso, conflito, replay e recuperação na Silver já executada. A entrega final deverá complementar os resumos com export dos notebooks incluindo outputs. IDs de catálogo, schema e Volume permanecem parâmetros de setup.
+Consultar e registrar os cenários específicos de atraso, conflito, replay e recuperação na Silver; conferir os valores financeiros e temporais na Gold; executar a consulta SQL e guardar Query Profile. A entrega final deverá complementar os resumos com exports dos notebooks incluindo outputs. IDs de catálogo, schema e Volume permanecem parâmetros de setup.
