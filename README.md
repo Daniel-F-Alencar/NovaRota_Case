@@ -2,9 +2,9 @@
 
 Case de Engenharia de Dados Sênior em Databricks Free Edition, com dados inteiramente sintéticos.
 
-Estado: fundação e Bronze concluídas. A demonstração registrou BRONZE_DEMO_PASSED em modo FRESH: 111 linhas nas seis fontes, com reconciliação, replay, atraso, evolução de schema e auditoria verificados pelo notebook. Os 34 testes locais passaram antes dessa execução. A primeira execução Silver também concluiu com sucesso; Gold e consultas analíticas estão implementadas e aguardam execução no Databricks.
+Estado: Bronze, Silver e Gold já tiveram uma execução concluída no Databricks Free Edition. A Bronze registrou 111 linhas; a primeira Silver reconciliou as mesmas 111 entradas; a Gold informou GOLD_PIPELINE_SUCCEEDED e reconciliou oito produtos, com 50 transações na fato. Os resumos são transcrições fornecidas pelo candidato. A consulta SQL analítica ainda não foi executada com evidência preservada.
 
-Na branch `feature/dq-and-scd`, a Silver inclui tipagem, qualidade, quarentena, canonização, SCD2, MERGE e controle de retomada. A execução informada no Databricks reconciliou 111 entradas: 102 aprovadas, 2 duplicatas e 7 em quarentena. A branch `feature/gold-data-products` acrescenta os produtos Gold e SQL analítico; sua execução remota ainda precisa de evidência. Os 34 testes locais citados acima pertencem à revisão Bronze.
+Na branch `feature/dq-and-scd`, a Silver inclui tipagem, qualidade, quarentena, canonização, SCD2, MERGE e controle de retomada. A execução informada reconciliou 111 entradas: 102 aprovadas, 2 duplicatas e 7 em quarentena. Na branch `feature/gold-data-products`, a Gold consumiu essa execução Silver e produziu 50 linhas na fato, 27 em cada produto mensal e de risco e 10 features. Os 34 testes locais documentados são anteriores à reorganização do pacote; a suíte não foi reexecutada nesta revisão, e não há testes de transformação Gold registrados.
 
 - [Acesso ao workspace e primeira amostra](docs/workspace-setup.md)
 - [Desenvolvimento local](docs/local-development.md)
@@ -58,7 +58,7 @@ novarota-lakehouse-case/
 
 Configuração de código fica em `src/novarota/config/`; arquivos JSON de ambiente ficam em `config/`. Os imports públicos existentes, como `from novarota.config import PipelineConfig`, permanecem iguais.
 
-A base Bronze e a organização do repositório compõem a entrega inicial em `main`; `develop` integra as próximas etapas. Ver [fluxo Git](docs/git-workflow.md). Os 34 testes aprovados são anteriores à reorganização; a suíte não foi reexecutada nesta etapa.
+`feature/gold-data-products` contém a implementação e a evidência da primeira execução Gold. `main` e `develop` ainda não incluem essa branch. Ver [fluxo Git](docs/git-workflow.md) para o fechamento da integração.
 
 ## Executar
 
@@ -88,6 +88,7 @@ Em outra máquina, seguir o [setup local](docs/local-development.md). O pacote n
 - [Correção da estrutura de pastas do ZIP](docs/evidence/import-archive-fix.md)
 - [Bronze das seis fontes aprovada — resumo da execução](docs/evidence/bronze-demo-passed.md)
 - [Silver concluída — resumo da primeira execução](docs/evidence/silver-demo-succeeded.md)
+- [Gold concluída — resumo da primeira execução](docs/evidence/gold-demo-succeeded.md)
 - [Gold — implementação e verificação do pacote](docs/evidence/gold-implementation.md)
 
-O objetivo é entregar os critérios completos do case progressivamente. Os artefatos da primeira mudança não demonstram, por si, conclusão das camadas seguintes.
+Para fechar a entrega, faltam evidências com outputs dos cenários Silver/Gold, execução da consulta SQL, revisão/execução atualizada dos testes e integração da branch Gold em develop e main. Limites, premissas e passos operacionais estão documentados nos runbooks.

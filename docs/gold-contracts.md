@@ -1,6 +1,6 @@
 # Contratos Gold
 
-Estado: código implementado na branch `feature/gold-data-products`; execução Gold no Databricks pendente. Os produtos leem somente versões Delta de uma Silver com `silver_execution_state.status=SUCCEEDED` para o dataset exato. Os oito destinos possuem `_dataset_id`, `_rule_version=gold_v1` e `_content_hash`.
+Estado: código implementado na branch `feature/gold-data-products`; a primeira execução informou sucesso e reconciliou os oito destinos. O resumo está em [evidence/gold-demo-succeeded.md](evidence/gold-demo-succeeded.md). Os produtos leem somente versões Delta de uma Silver com `silver_execution_state.status=SUCCEEDED` para o dataset exato. Os oito destinos possuem `_dataset_id`, `_rule_version=gold_v1` e `_content_hash`.
 
 | Produto | Grão/chave | Regra |
 | --- | --- | --- |

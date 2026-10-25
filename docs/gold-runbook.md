@@ -1,6 +1,6 @@
 # Executar a Gold
 
-Pré-requisito: executar `02_silver_demo` no mesmo workspace e obter `SILVER_PIPELINE_SUCCEEDED`. A primeira Silver do `case01` foi [informada como concluída](evidence/silver-demo-succeeded.md). A Gold ainda não foi executada no Databricks; as tabelas e métricas abaixo são contratos de implementação, não resultados observados.
+Pré-requisito: executar `02_silver_demo` no mesmo workspace e obter `SILVER_PIPELINE_SUCCEEDED`. A primeira Silver do `case01` foi [informada como concluída](evidence/silver-demo-succeeded.md). A primeira Gold também foi informada como concluída; veja [o resumo e o JSON](evidence/gold-demo-succeeded.md). O roteiro abaixo serve para reproduzir ou retomar a execução.
 
 ## Importar e executar
 
@@ -10,13 +10,13 @@ Pré-requisito: executar `02_silver_demo` no mesmo workspace e obter `SILVER_PIP
 4. Usar Run all. Guardar o `run_id` impresso antes do processamento. A última célula exibe a fato dos cenários, cliente-mês, risco, features, auditoria e o JSON final.
 5. Se o notebook importar pacote antigo em cache, reiniciar a sessão Python e preencher `project_root` com a pasta `/Workspace/.../novarota_case` recém-importada.
 
-Status esperado: `GOLD_PIPELINE_SUCCEEDED`. Confirmar no output: `T_PARTIAL` bruto 100, estornado 30 e líquido 70; `T_FULL` 80, 80 e zero; `T_CANCELLED`, `T_FX` e `T_AFTER_CANCEL` permanecem na fato com métricas BRL nulas. Esses valores são expectativas a conferir, não evidência de execução.
+Status observado: `GOLD_PIPELINE_SUCCEEDED`, run `ddb1e31e37d3426e8b1d97550cfe576f`, com `feature_date=2026-10-24`. O JSON confirma 50 linhas na fato, 12/15/20 versões nas dimensões de cliente/conta/cartão, um estabelecimento, 27 linhas em cada agregado mensal e de risco e 10 features. O JSON não inclui os valores individuais dos cenários; conferir `T_PARTIAL` (100/30/70), `T_FULL` (80/80/0) e as linhas não elegíveis no output das células exibidas antes de afirmar validação de negócio.
 
 ## Destinos e consulta SQL
 
 Tabelas em `workspace.novarota_case01_gold`: `gold_fato_transacao`, `gold_dim_cliente`, `gold_dim_conta`, `gold_dim_cartao`, `gold_dim_estabelecimento`, `gold_cliente_mes`, `gold_indicadores_risco` e `gold_features_cliente`. Filtrar `_dataset_id='workspace.novarota_case01_bronze.novarota_case01_silver'`. Contratos e grãos estão em [gold-contracts.md](gold-contracts.md).
 
-A consulta [01_anomalias_cliente.sql](../sql/01_anomalias_cliente.sql) usa CTEs encadeadas, ROW_NUMBER, LAG, FIRST_VALUE e NTILE; compara cada cliente com meses anteriores e com cidade/segmento de suas compras. Para executar no SQL Editor, substituir `__CATALOG__` por `workspace`, `__GOLD_SCHEMA__` por `novarota_case01_gold` e `__DATASET_KEY__` pelo identificador acima. A classificação exige pelo menos dois períodos anteriores e três clientes no grupo; a amostra pequena pode resultar em `BASELINE_INSUFICIENTE`, o que é esperado. Exportar plano/Query Profile e outputs se for usar como evidência de execução SQL.
+A consulta [01_anomalias_cliente.sql](../sql/01_anomalias_cliente.sql) usa CTEs encadeadas, ROW_NUMBER, LAG, FIRST_VALUE e NTILE; compara cada cliente com os períodos anteriores observados na mesma cidade/segmento e com os pares do mesmo grupo. Para executar no SQL Editor, substituir `__CATALOG__` por `workspace`, `__GOLD_SCHEMA__` por `novarota_case01_gold` e `__DATASET_KEY__` pelo identificador acima. A classificação exige pelo menos dois períodos anteriores e três clientes no grupo; a amostra pequena pode resultar em `BASELINE_INSUFICIENTE`, o que é esperado. A consulta ainda não tem evidência de execução: guardar saída e Query Profile/plano para concluir esse item.
 
 ## Retomada e consistência
 
@@ -24,4 +24,4 @@ Uma execução por dataset de cada vez. Não iniciar Silver enquanto Gold captur
 
 O controle fica em `workspace.novarota_ops.gold_execution_state` e a auditoria em `pipeline_events`. Consumidores devem exigir Gold SUCCEEDED e conferir `silver_run_id` com o estado Silver atual. Não há transação entre as oito tabelas; STARTED/FAILED bloqueiam consumo. Se a Silver mudar durante Gold, a tentativa falha. Não apagar staging, controle ou fontes para forçar sucesso; conservar erro e recuperar deliberadamente.
 
-O algoritmo reconstrói o **dataset completo** a cada execução; MERGE evita duplicatas e sincroniza linhas retiradas por correção, mas não reduz leitura por partição. Em ambiente maior, avaliar atualização por chaves afetadas, compactação/OPTIMIZE quando suportado, distribuição dos joins e retenção de staging. A amostra não prova escala. Sem PySpark local, a primeira execução no Databricks é o próximo critério de verificação.
+O algoritmo reconstrói o **dataset completo** a cada execução; MERGE evita duplicatas e sincroniza linhas retiradas por correção, mas não reduz leitura por partição. Em ambiente maior, avaliar atualização por chaves afetadas, compactação/OPTIMIZE quando suportado, distribuição dos joins e retenção de staging. A amostra não prova escala. A execução remota foi informada como concluída; a validação SQL e a revisão da suíte local continuam abertas.
