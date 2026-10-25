@@ -2,9 +2,9 @@
 
 Case de Engenharia de Dados Sênior em Databricks Free Edition, com dados inteiramente sintéticos.
 
-Estado: Bronze, Silver e Gold já tiveram uma execução concluída no Databricks Free Edition. A Bronze registrou 111 linhas; a primeira Silver reconciliou as mesmas 111 entradas; a Gold informou GOLD_PIPELINE_SUCCEEDED e reconciliou oito produtos, com 50 transações na fato. Os resumos são transcrições fornecidas pelo candidato. A consulta SQL analítica ainda não foi executada com evidência preservada.
+Estado: Bronze, Silver e Gold têm exports executados do Databricks Free Edition preservados em `docs/evidence/notebooks/`. A Bronze registrou seis fontes; a Silver reconciliou 111 entradas; a Gold concluiu oito produtos, incluindo 50 transações na fato. Os outputs dos cenários também estão nos exports. Há CSV e Query Profile de uma execução concluída da consulta analítica; o perfil corresponde à versão anterior das janelas, portanto falta reexecutar a versão corrigida que está no repositório.
 
-Na branch `feature/dq-and-scd`, a Silver inclui tipagem, qualidade, quarentena, canonização, SCD2, MERGE e controle de retomada. A execução informada reconciliou 111 entradas: 102 aprovadas, 2 duplicatas e 7 em quarentena. Na branch `feature/gold-data-products`, a Gold consumiu essa execução Silver e produziu 50 linhas na fato, 27 em cada produto mensal e de risco e 10 features. A suíte local foi reexecutada nesta revisão: 34 testes passaram. Ela não cobre transformações Spark Silver/Gold diretamente; ver [evidência](docs/evidence/local-test-suite-passed.md).
+Na branch `feature/dq-and-scd`, a Silver inclui tipagem, qualidade, quarentena, canonização, SCD2, MERGE e controle de retomada. A execução reconciliou 111 entradas: 102 aprovadas, 2 duplicatas e 7 em quarentena. Na branch `feature/gold-data-products`, a Gold produziu 50 linhas na fato, 27 em cada produto mensal e de risco e 10 features. A suíte local nesta revisão tem 40 testes aprovados; inclui asserções dos outputs capturados e do SQL, mas não executa transformações Spark localmente. Ver [evidência](docs/evidence/local-test-suite-passed.md).
 
 - [Acesso ao workspace e primeira amostra](docs/workspace-setup.md)
 - [Desenvolvimento local](docs/local-development.md)
@@ -58,7 +58,7 @@ novarota-lakehouse-case/
 
 Configuração de código fica em `src/novarota/config/`; arquivos JSON de ambiente ficam em `config/`. Os imports públicos existentes, como `from novarota.config import PipelineConfig`, permanecem iguais.
 
-`feature/gold-data-products` contém a implementação e a evidência da primeira execução Gold. `main` e `develop` ainda não incluem essa branch. Ver [fluxo Git](docs/git-workflow.md) para o fechamento da integração.
+`feature/gold-data-products` contém a implementação e a evidência da execução Gold. A integração em `develop` e `main` será registrada no histórico Git após a revisão final desta branch. Ver [fluxo Git](docs/git-workflow.md).
 
 ## Executar
 
@@ -89,7 +89,9 @@ Em outra máquina, seguir o [setup local](docs/local-development.md). O pacote n
 - [Bronze das seis fontes aprovada — resumo da execução](docs/evidence/bronze-demo-passed.md)
 - [Silver concluída — resumo da primeira execução](docs/evidence/silver-demo-succeeded.md)
 - [Gold concluída — resumo da primeira execução](docs/evidence/gold-demo-succeeded.md)
+- [Exports HTML Bronze, Silver e Gold revisados](docs/evidence/notebook-exports-reviewed.md)
+- [Execução SQL e Query Profile de anomalias](docs/evidence/anomalias-sql-execution.md)
 - [Gold — implementação e verificação do pacote](docs/evidence/gold-implementation.md)
-- [Suíte local — 34 testes aprovados](docs/evidence/local-test-suite-passed.md)
+- [Suíte local — 40 testes aprovados](docs/evidence/local-test-suite-passed.md)
 
-Para fechar a entrega, faltam evidências com outputs dos cenários Silver/Gold, execução da consulta SQL, revisão/execução atualizada dos testes e integração da branch Gold em develop e main. Limites, premissas e passos operacionais estão documentados nos runbooks.
+Pendência de validação remota: reexecutar no SQL Warehouse a versão atual de `sql/01_anomalias_cliente.sql` e substituir o CSV/Query Profile anteriores. Em seguida, a entrega fica alinhada ao código versionado e os branches podem ser promovidos. Limites, premissas e passos operacionais estão documentados nos runbooks.

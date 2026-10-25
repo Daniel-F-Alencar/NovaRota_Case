@@ -1,12 +1,12 @@
--- Substituir __CATALOG__, __GOLD_SCHEMA__ e __DATASET_KEY__ pelos valores do runbook.
+-- Query configurada para o workspace e o dataset do case; ajuste o catálogo/schema ao reproduzir em outro ambiente.
 -- Grão da saída: cliente, mês, cidade e segmento vigentes nas compras daquele grupo.
 WITH compras AS (
     SELECT f.id_cliente, f.data_mes, d.cidade, d.segmento,
            f.id_transacao, f.valor_liquido_brl
-    FROM __CATALOG__.__GOLD_SCHEMA__.gold_fato_transacao f
-    JOIN __CATALOG__.__GOLD_SCHEMA__.gold_dim_cliente d
+    FROM workspace.novarota_case01_gold.gold_fato_transacao f
+    JOIN workspace.novarota_case01_gold.gold_dim_cliente d
       ON f._dataset_id = d._dataset_id AND f.cliente_version_id = d.version_id
-    WHERE f._dataset_id = '__DATASET_KEY__'
+    WHERE f._dataset_id = 'workspace.novarota_case01_bronze.novarota_case01_silver'
       AND f.elegivel_indicadores = true
 ),
 mensal AS (
