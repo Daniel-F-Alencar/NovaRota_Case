@@ -4,7 +4,7 @@ Case de Engenharia de Dados Sênior em Databricks Free Edition, com dados inteir
 
 Estado: Bronze, Silver e Gold têm exports executados do Databricks Free Edition preservados em `docs/evidence/notebooks/`. A Bronze registrou seis fontes; a Silver reconciliou 111 entradas; a Gold concluiu oito produtos, incluindo 50 transações na fato. Os outputs dos cenários também estão nos exports. Há CSV e Query Profile de uma execução concluída da consulta analítica; o perfil corresponde à versão anterior das janelas, portanto falta reexecutar a versão corrigida que está no repositório.
 
-Na branch `feature/dq-and-scd`, a Silver inclui tipagem, qualidade, quarentena, canonização, SCD2, MERGE e controle de retomada. A execução reconciliou 111 entradas: 102 aprovadas, 2 duplicatas e 7 em quarentena. Na branch `feature/gold-data-products`, a Gold produziu 50 linhas na fato, 27 em cada produto mensal e de risco e 10 features. A suíte local nesta revisão tem 40 testes aprovados; inclui asserções dos outputs capturados e do SQL, mas não executa transformações Spark localmente. Ver [evidência](docs/evidence/local-test-suite-passed.md).
+`feature/dq-and-scd` contém a implementação Silver, com tipagem, qualidade, quarentena, canonização, SCD2, MERGE e retomada; a execução reconciliou 111 entradas: 102 aprovadas, 2 duplicatas e 7 em quarentena. `feature/gold-data-products` foi integrada a `develop` e promovida para `main`; a Gold produziu 50 linhas na fato, 27 em cada produto mensal e de risco e 10 features. A suíte local nesta revisão tem 40 testes aprovados; inclui asserções dos outputs capturados e do SQL, mas não executa transformações Spark localmente. Ver [evidência](docs/evidence/local-test-suite-passed.md).
 
 - [Acesso ao workspace e primeira amostra](docs/workspace-setup.md)
 - [Desenvolvimento local](docs/local-development.md)
@@ -58,7 +58,7 @@ novarota-lakehouse-case/
 
 Configuração de código fica em `src/novarota/config/`; arquivos JSON de ambiente ficam em `config/`. Os imports públicos existentes, como `from novarota.config import PipelineConfig`, permanecem iguais.
 
-`feature/gold-data-products` contém a implementação e a evidência da execução Gold. A integração em `develop` e `main` será registrada no histórico Git após a revisão final desta branch. Ver [fluxo Git](docs/git-workflow.md).
+`main` contém a implementação e as evidências Bronze, Silver e Gold. A feature Gold foi integrada a `develop` e depois promovida a `main`, preservando os merges e commits anteriores. Ver [fluxo Git](docs/git-workflow.md).
 
 ## Executar
 
@@ -94,4 +94,4 @@ Em outra máquina, seguir o [setup local](docs/local-development.md). O pacote n
 - [Gold — implementação e verificação do pacote](docs/evidence/gold-implementation.md)
 - [Suíte local — 40 testes aprovados](docs/evidence/local-test-suite-passed.md)
 
-Pendência de validação remota: reexecutar no SQL Warehouse a versão atual de `sql/01_anomalias_cliente.sql` e substituir o CSV/Query Profile anteriores. Em seguida, a entrega fica alinhada ao código versionado e os branches podem ser promovidos. Limites, premissas e passos operacionais estão documentados nos runbooks.
+Pendência de validação remota: reexecutar no SQL Warehouse a versão atual de `sql/01_anomalias_cliente.sql` e substituir o CSV/Query Profile anteriores. Os branches locais já estão integrados; falta atualizar o resultado SQL para que a evidência corresponda à lógica versionada. Limites, premissas e passos operacionais estão documentados nos runbooks.

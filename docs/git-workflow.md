@@ -6,13 +6,13 @@ O histórico registra a evolução do projeto, com autoria, datas, mensagens e m
 
 | Branch | Uso |
 | --- | --- |
-| main | Entrega inicial Bronze; Gold ainda não integrada |
-| develop | Integração anterior à Gold; Gold ainda não integrada |
+| main | Entrega Bronze, Silver e Gold; branch de entrega |
+| develop | Integração Bronze, Silver e Gold; promovida para main |
 | feature/ingestion-framework | Organização modular da fundação/ingestão |
 | feature/dq-and-scd | Silver implementada, com primeira execução demonstrada |
-| feature/gold-data-products | Gold implementada; primeira execução remota informada; SQL e cenários detalhados pendentes |
+| feature/gold-data-products | Gold implementada e integrada a develop; contém evidências HTML, CSV e Query Profile |
 
-O estado Gold está registrado em [evidence/gold-demo-succeeded.md](evidence/gold-demo-succeeded.md). A branch ainda não foi integrada a develop ou main. Destino da publicação privada: [Daniel-F-Alencar/NovaRota_Case](https://github.com/Daniel-F-Alencar/NovaRota_Case). As cinco branches fazem parte da publicação inicial.
+O estado de execução Gold está em [evidence/gold-demo-succeeded.md](evidence/gold-demo-succeeded.md), e os exports dos notebooks estão em [evidence/notebook-exports-reviewed.md](evidence/notebook-exports-reviewed.md). A feature Gold foi integrada a develop e develop foi promovida a main, preservando o merge remoto anterior da Silver. Destino da publicação privada: [Daniel-F-Alencar/NovaRota_Case](https://github.com/Daniel-F-Alencar/NovaRota_Case). As cinco branches fazem parte da publicação.
 
 ## Inspecionar o estado
 
@@ -25,10 +25,10 @@ git log --graph --oneline --decorate --all
 
 ## Próximos passos para fechar a entrega
 
-1. Preservar os exports executados dos notebooks Bronze, Silver e Gold, incluindo as saídas das consultas de cenários.
-2. Executar a consulta SQL de anomalias no workspace e guardar resultado e Query Profile/plano.
-3. Suíte local atual: 34 testes aprovados; ver [evidência](evidence/local-test-suite-passed.md). Ainda falta cobertura direta de transformação Spark Silver/Gold, além dos exports de notebook, e repetir os testes após a revisão final.
-4. Depois da revisão, integrar feature/gold-data-products em develop e promover develop para main, preservando os commits existentes.
+1. Exports dos notebooks Bronze, Silver e Gold preservados e revisados, incluindo as saídas dos cenários.
+2. CSV e Query Profile da consulta SQL preservados. Reexecutar `sql/01_anomalias_cliente.sql`, porque o perfil atual registra a versão anterior das janelas analíticas; veja [instruções e detalhe da evidência](evidence/anomalias-sql-execution.md).
+3. Suíte local: 40 testes aprovados; ver [evidência](evidence/local-test-suite-passed.md). As transformações Spark foram executadas nos notebooks Databricks, enquanto as novas asserções locais conferem os outputs exportados e a estrutura SQL.
+4. Feature Gold integrada em develop; develop promovida para main, mantendo os commits e o histórico de merges.
 5. Confirmar o formato final combinado com o avaliador: repositório Git privado ou pacote com o histórico e as evidências.
 
-Os resumos JSON de Bronze, Silver e Gold demonstram execuções informadas, mas não substituem os exports com células e consultas visíveis. Registrar os comandos executados e seus resultados ao atualizar este checklist.
+Os exports HTML preservam células e consultas visíveis; os resumos JSON ajudam a localizar os run IDs e as volumetrias. Ao reexecutar o SQL atualizado, substituir a evidência anterior e registrar o novo ID do perfil.
