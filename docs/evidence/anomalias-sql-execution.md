@@ -4,6 +4,8 @@ O CSV e o Query Profile recebidos registram uma execução concluída no SQL War
 
 O profile contém um grafo de plano adaptativo Photon, com scans Parquet da fato/dimensão, agregações com shuffle, ordenações, janelas e joins broadcast hash. Para a amostra pequena, o plano terminou rapidamente. O grafo mostra dois nós de scan da fato e dois da dimensão; isso pode decorrer da expansão das CTEs reutilizadas em ramos separados e merece atenção se o volume crescer. O perfil não traz insights automáticos. Ele registra só 4 arquivos e 118 linhas lidas, então não demonstra comportamento em escala.
 
+Há uma inconsistência no próprio snapshot: `query.status` está `FINISHED`, mas `planMetadatas[0].statusId` está `RUNNING`, apesar do grafo e das métricas estarem presentes. Na reexecução, confira se a exportação nova apresenta estado final também para o plano.
+
 Esses arquivos estão preservados em [01_anomalias_cliente_sql.csv](01_anomalias_cliente_sql.csv) e [query-profile_01f1d084-b11e-1d8c-aaee-496e19470eb7.json](query-profile_01f1d084-b11e-1d8c-aaee-496e19470eb7.json). A saída CSV tem a mesma contagem de linhas do perfil.
 
 ## Limite dessa evidência
