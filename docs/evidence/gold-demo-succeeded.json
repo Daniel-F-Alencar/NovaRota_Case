@@ -1,0 +1,53 @@
+{
+  "status": "GOLD_PIPELINE_SUCCEEDED",
+  "run_id": "ddb1e31e37d3426e8b1d97550cfe576f",
+  "silver_run_id": "5e3210757d82445cad0bfa0cbe38e9c2",
+  "catalog": "workspace",
+  "silver_schema": "novarota_case01_silver",
+  "gold_schema": "novarota_case01_gold",
+  "rule_version": "gold_v1",
+  "feature_date": "2026-10-24",
+  "rows_by_table": {
+    "gold_fato_transacao": 50,
+    "gold_dim_cliente": 12,
+    "gold_dim_conta": 15,
+    "gold_dim_cartao": 20,
+    "gold_dim_estabelecimento": 1,
+    "gold_cliente_mes": 27,
+    "gold_indicadores_risco": 27,
+    "gold_features_cliente": 10
+  },
+  "input_versions": {
+    "clientes_scd2": {
+      "table": "workspace.novarota_case01_silver.clientes_scd2",
+      "table_id": "96c42621-dd61-4773-babd-78cb414409a8",
+      "version": 1
+    },
+    "contas_scd2": {
+      "table": "workspace.novarota_case01_silver.contas_scd2",
+      "table_id": "f57b87d2-efe0-4de4-86d9-df15b0fb0b0c",
+      "version": 1
+    },
+    "cartoes_scd2": {
+      "table": "workspace.novarota_case01_silver.cartoes_scd2",
+      "table_id": "46d3a982-6540-4aaf-979b-3b321c430504",
+      "version": 1
+    },
+    "transacoes_atual": {
+      "table": "workspace.novarota_case01_silver.transacoes_atual",
+      "table_id": "f09b0404-8f8e-4538-a846-6367e04f7723",
+      "version": 1
+    },
+    "eventos_risco": {
+      "table": "workspace.novarota_case01_silver.eventos_risco",
+      "table_id": "531a9f30-1aac-4be4-b28b-b83d1b63850e",
+      "version": 1
+    },
+    "estornos": {
+      "table": "workspace.novarota_case01_silver.estornos",
+      "table_id": "c6e78324-a8c1-4daf-a1f5-eed0bcd6020a",
+      "version": 1
+    }
+  },
+  "finished_at": "2026-10-24T00:25:55.037839+00:00"
+}

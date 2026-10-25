@@ -1,5 +1,5 @@
 # SQL
 
-Diretório para consultas analíticas versionadas da entrega: CTEs, janelas temporais, segmentação e detecção de anomalias. Essas consultas serão implementadas na mudança Gold.
+Consultas analíticas versionadas da entrega. `01_anomalias_cliente.sql` usa CTEs, janelas temporais, segmentação e detecção de anomalias; o baseline próprio acompanha os períodos observados pelo cliente dentro da mesma cidade/segmento. O runbook Gold explica a substituição dos identificadores e a execução no Databricks.
 
-As expressões SQL já usadas por setup, ingestão e auditoria permanecem junto aos respectivos módulos Python. Ainda não existe uma entrega SQL analítica neste diretório.
+As expressões SQL de setup, ingestão e auditoria permanecem junto aos módulos Python. A consulta analítica ainda não possui output remoto ou Query Profile documentado.

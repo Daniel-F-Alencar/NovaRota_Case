@@ -1,0 +1,41 @@
+{
+  "status": "SILVER_PIPELINE_SUCCEEDED",
+  "run_id": "5e3210757d82445cad0bfa0cbe38e9c2",
+  "catalog": "workspace",
+  "bronze_schema": "novarota_case01_bronze",
+  "silver_schema": "novarota_case01_silver",
+  "rule_version": "silver_v1",
+  "scope": "FULL_DATASET",
+  "mode": "incremental",
+  "quality_by_source": {
+    "cartoes_cdc": {"approved": 20, "duplicates": 0, "input_rows": 21, "quarantine": 1, "source": "cartoes_cdc"},
+    "clientes_cdc": {"approved": 12, "duplicates": 1, "input_rows": 14, "quarantine": 1, "source": "clientes_cdc"},
+    "contas_cdc": {"approved": 15, "duplicates": 0, "input_rows": 16, "quarantine": 1, "source": "contas_cdc"},
+    "estornos": {"approved": 2, "duplicates": 0, "input_rows": 3, "quarantine": 1, "source": "estornos"},
+    "eventos_risco": {"approved": 2, "duplicates": 0, "input_rows": 3, "quarantine": 1, "source": "eventos_risco"},
+    "transacoes": {"approved": 51, "duplicates": 1, "input_rows": 54, "quarantine": 2, "source": "transacoes"}
+  },
+  "rows_by_table": {
+    "clientes_eventos": 12,
+    "clientes_scd2": 12,
+    "contas_eventos": 15,
+    "contas_scd2": 15,
+    "cartoes_eventos": 20,
+    "cartoes_scd2": 20,
+    "eventos_risco": 2,
+    "estornos": 2,
+    "transacoes_versoes": 51,
+    "transacoes_atual": 50,
+    "silver_classificacoes": 111,
+    "silver_avaliacoes": 111
+  },
+  "input_versions": {
+    "clientes_cdc": {"table": "workspace.novarota_case01_bronze.bronze_clientes_cdc", "table_id": "3cf1e0f6-c211-48d2-bd01-782d192c0f3d", "version": 3},
+    "contas_cdc": {"table": "workspace.novarota_case01_bronze.bronze_contas_cdc", "table_id": "7aa8a0e1-075f-4fd3-8eaf-8e07dffc9c67", "version": 3},
+    "cartoes_cdc": {"table": "workspace.novarota_case01_bronze.bronze_cartoes_cdc", "table_id": "3da85566-bd66-4252-a48f-ef1048d66af5", "version": 3},
+    "transacoes": {"table": "workspace.novarota_case01_bronze.bronze_transacoes", "table_id": "8f231ff3-c5c9-4973-b262-f737694d4023", "version": 4},
+    "eventos_risco": {"table": "workspace.novarota_case01_bronze.bronze_eventos_risco", "table_id": "b8f2b456-8568-4e7b-9191-e5ae2ec0edb1", "version": 3},
+    "estornos": {"table": "workspace.novarota_case01_bronze.bronze_estornos", "table_id": "b4493935-0794-470e-bf1b-eefc5100505f", "version": 3}
+  },
+  "finished_at": "2026-10-23T23:57:57.782892+00:00"
+}

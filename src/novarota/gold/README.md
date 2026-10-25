@@ -1,5 +1,5 @@
 # Gold
 
-Diretório reservado para fato de transação, dimensões de consumo, indicadores de risco e features com data de corte. Não há transformação Gold implementada.
+Contém transformação distribuída do fato de transação, dimensões de consumo, comportamento mensal, indicadores de risco e features com data de corte, além do pipeline Delta com snapshot, MERGE e auditoria.
 
-A mudança futura `publish-gold-risk-products` será proposta depois da demonstração Silver. A visão do produto está em `docs/solution-exploration.md` na raiz do repositório.
+Contratos e limites estão em `docs/gold-contracts.md`; execução em `docs/gold-runbook.md`. A primeira execução remota foi informada como concluída; o resumo está em `docs/evidence/gold-demo-succeeded.md`.
