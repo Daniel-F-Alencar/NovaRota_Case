@@ -2,6 +2,8 @@
 
 O CSV e o Query Profile recebidos registram uma execução concluída no SQL Warehouse. O perfil tem ID `01f1d084-b11e-1d8c-aaee-496e19470eb7`, status `FINISHED`, 28 linhas produzidas, 118 lidas, 4 arquivos lidos, 3.657 ms de tempo total e resultado não servido do cache. O CSV tem 28 linhas: 25 `BASELINE_INSUFICIENTE`, 2 `NORMAL` e 1 `ANOMALIA`.
 
+O profile contém um grafo de plano adaptativo Photon, com scans Parquet da fato/dimensão, agregações com shuffle, ordenações, janelas e joins broadcast hash. Para a amostra pequena, o plano terminou rapidamente. O grafo mostra dois nós de scan da fato e dois da dimensão; isso pode decorrer da expansão das CTEs reutilizadas em ramos separados e merece atenção se o volume crescer. O perfil não traz insights automáticos. Ele registra só 4 arquivos e 118 linhas lidas, então não demonstra comportamento em escala.
+
 Esses arquivos estão preservados em [01_anomalias_cliente_sql.csv](01_anomalias_cliente_sql.csv) e [query-profile_01f1d084-b11e-1d8c-aaee-496e19470eb7.json](query-profile_01f1d084-b11e-1d8c-aaee-496e19470eb7.json). A saída CSV tem a mesma contagem de linhas do perfil.
 
 ## Limite dessa evidência
