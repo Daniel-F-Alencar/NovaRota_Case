@@ -27,7 +27,7 @@ git log --graph --oneline --decorate --all
 
 1. Preservar os exports executados dos notebooks Bronze, Silver e Gold, incluindo as saídas das consultas de cenários.
 2. Executar a consulta SQL de anomalias no workspace e guardar resultado e Query Profile/plano.
-3. Revisar e executar a suíte local na revisão final. Ela não foi executada após a reorganização e a implementação Gold; também não há testes locais de transformação Gold registrados.
+3. Suíte local atual: 34 testes aprovados; ver [evidência](evidence/local-test-suite-passed.md). Ainda falta cobertura direta de transformação Spark Silver/Gold, além dos exports de notebook, e repetir os testes após a revisão final.
 4. Depois da revisão, integrar feature/gold-data-products em develop e promover develop para main, preservando os commits existentes.
 5. Confirmar o formato final combinado com o avaliador: repositório Git privado ou pacote com o histórico e as evidências.
 

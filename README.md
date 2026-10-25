@@ -4,7 +4,7 @@ Case de Engenharia de Dados Sênior em Databricks Free Edition, com dados inteir
 
 Estado: Bronze, Silver e Gold já tiveram uma execução concluída no Databricks Free Edition. A Bronze registrou 111 linhas; a primeira Silver reconciliou as mesmas 111 entradas; a Gold informou GOLD_PIPELINE_SUCCEEDED e reconciliou oito produtos, com 50 transações na fato. Os resumos são transcrições fornecidas pelo candidato. A consulta SQL analítica ainda não foi executada com evidência preservada.
 
-Na branch `feature/dq-and-scd`, a Silver inclui tipagem, qualidade, quarentena, canonização, SCD2, MERGE e controle de retomada. A execução informada reconciliou 111 entradas: 102 aprovadas, 2 duplicatas e 7 em quarentena. Na branch `feature/gold-data-products`, a Gold consumiu essa execução Silver e produziu 50 linhas na fato, 27 em cada produto mensal e de risco e 10 features. Os 34 testes locais documentados são anteriores à reorganização do pacote; a suíte não foi reexecutada nesta revisão, e não há testes de transformação Gold registrados.
+Na branch `feature/dq-and-scd`, a Silver inclui tipagem, qualidade, quarentena, canonização, SCD2, MERGE e controle de retomada. A execução informada reconciliou 111 entradas: 102 aprovadas, 2 duplicatas e 7 em quarentena. Na branch `feature/gold-data-products`, a Gold consumiu essa execução Silver e produziu 50 linhas na fato, 27 em cada produto mensal e de risco e 10 features. A suíte local foi reexecutada nesta revisão: 34 testes passaram. Ela não cobre transformações Spark Silver/Gold diretamente; ver [evidência](docs/evidence/local-test-suite-passed.md).
 
 - [Acesso ao workspace e primeira amostra](docs/workspace-setup.md)
 - [Desenvolvimento local](docs/local-development.md)
@@ -90,5 +90,6 @@ Em outra máquina, seguir o [setup local](docs/local-development.md). O pacote n
 - [Silver concluída — resumo da primeira execução](docs/evidence/silver-demo-succeeded.md)
 - [Gold concluída — resumo da primeira execução](docs/evidence/gold-demo-succeeded.md)
 - [Gold — implementação e verificação do pacote](docs/evidence/gold-implementation.md)
+- [Suíte local — 34 testes aprovados](docs/evidence/local-test-suite-passed.md)
 
 Para fechar a entrega, faltam evidências com outputs dos cenários Silver/Gold, execução da consulta SQL, revisão/execução atualizada dos testes e integração da branch Gold em develop e main. Limites, premissas e passos operacionais estão documentados nos runbooks.

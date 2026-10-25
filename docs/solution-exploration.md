@@ -116,7 +116,7 @@ Documentar papéis de ingestão, transformação, consumo Gold e Data Science em
 1. `bootstrap-synthetic-bronze`: setup reproduzível, contratos sintéticos, lotes determinísticos, Auto Loader e Bronze com metadados. Concluída e arquivada em 2026-10-23.
 2. Silver: contratos tipados, quarentena, SCD2, MERGE, atrasos e reprocessamento implementados na feature/dq-and-scd. A primeira execução real reconciliou 111 entradas; critérios adversos ainda exigem evidência específica.
 3. Gold: fato, dimensões, agregações, features com corte temporal e SQL avançado implementados na feature/gold-data-products. A primeira execução Gold foi informada como concluída; faltam a evidência dos valores por cenário e a execução da consulta SQL.
-4. `demonstrate-integrated-case`: reunir exports com outputs Bronze/Silver/Gold, validar cenários temporais e financeiros, executar SQL e testes na revisão final e integrar a branch Gold em develop/main. A suíte atual não foi reexecutada após a reorganização e não registra testes de transformação Gold.
+4. `demonstrate-integrated-case`: reunir exports com outputs Bronze/Silver/Gold, validar cenários temporais e financeiros, executar SQL, acrescentar cobertura direta das transformações Spark Silver/Gold e integrar a branch Gold em develop/main. A suíte local passou com 34 testes em 2026-10-25; os testes atuais não exercitam diretamente essas transformações.
 
 Git deverá registrar evolução real com conventional commits. Não fabricar commits retroativos. A entrega poderá ser repositório privado ou pacote preservando o histórico Git, conforme combinado com o avaliador.
 

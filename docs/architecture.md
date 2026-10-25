@@ -34,7 +34,7 @@ O layout sugerido no briefing é mantido dentro de `src/novarota/`, um namespace
 | src/novarota/silver/ | Canonização, SCD2, MERGE e controle de tentativas | Implementado; primeira execução concluída |
 | src/novarota/gold/ | Produtos de consumo, features e controle de execução | Implementado; primeira execução remota informada |
 | config/ | JSON de exemplo por ambiente, sem credenciais | Implementado |
-| tests/ | Verificações locais e fixtures independentes | 34 testes na última execução anterior à reorganização |
+| tests/ | Verificações locais e fixtures independentes | 34 testes passaram em 2026-10-25; sem cobertura direta das transformações Spark Silver/Gold |
 | sql/ | Consultas analíticas versionadas | Implementado; execução remota pendente |
 | notebooks/ | Entradas de execução e demonstração | Smoke, Bronze, Silver e Gold implementados; primeira Gold executada |
 | scripts/ | Build determinístico do pacote para importação | Implementado |
@@ -71,4 +71,4 @@ Gold calcula fato, dimensões, comportamento, risco e features sobre versões De
 
 [Resumo Silver](evidence/silver-demo-succeeded.md): JSON final fornecido pelo usuário. Três CSVs de cenários foram examinados localmente e permaneceram fora do Git por solicitação do usuário. A transcrição Gold está em [resumo próprio](evidence/gold-demo-succeeded.md); os exports executados dos notebooks e o output da consulta SQL ainda faltam.
 
-A reorganização moveu config.py para config/__init__.py com imports públicos preservados e ajustou as expectativas do teste de empacotamento. A suíte não foi reexecutada após essa reorganização e a implementação Gold; os 34 testes aprovados são evidência anterior a essas mudanças.
+A reorganização moveu config.py para config/__init__.py com imports públicos preservados e ajustou as expectativas do teste de empacotamento. A suíte atual foi executada em 2026-10-25 e passou nos 34 casos; ela cobre componentes locais, sem executar diretamente as transformações Spark Silver/Gold. Ver [evidência da suíte](evidence/local-test-suite-passed.md).
